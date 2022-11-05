@@ -21,14 +21,15 @@ class MyApp extends StatelessWidget {
         // 로딩화면 -> 동네 설정 화면 바로 나오면 안 되고, 로그인화면 먼저 나와야 할 듯
         // 최초 로그인일 경우에만 동네 설정 화면 띄우기
         // 이 기능이 어렵다면, 동네 설정 화면은 제거하고 홈화면에서 gps 버튼 눌러 설정할 수 있도록 함
-        '/': (context) => const MyHomePage(title: 'Location',),
+        '/': (context) => const LoginPage(title: 'Login',),
+        '/location': (context) => const MyHomePage(title: 'Location',),
         '/add': (context) => const AddPage(title: 'Add Cloth',),
         '/select': (context) => const SelectPage(title: 'Select Closet',),
         '/closet': (context) => const MyClosetPage(title: 'My Closet',),
         '/main': (context) => const MainPage(title: 'Main',),
         //'/settings': (context) => const SettingsPage(title: 'Settings',),
-        //'/login': (context) => const LoginPage(title: 'Login',),
-        //'/signup': (context) => const SignupPage(title: 'Signup',),
+        '/login': (context) => const LoginPage(title: 'Login',),
+        '/signup': (context) => const SignupPage(title: 'Signup',),
         '/result': (context) => const ResultPage(title: 'Result',),
       },
       // home: const MyHomePage(),
@@ -381,6 +382,227 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  bool _isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: SizedBox(
+          width: 380,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  '로그인',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '아이디',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '로그인에 실패하였습니다. 확인 후 다시 입력해주세요.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '비밀번호',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '로그인에 실패하였습니다. 확인 후 다시 입력해주세요.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: ListTileTheme(
+                        horizontalTitleGap: 0,
+                        child: CheckboxListTile(
+                          title: const Text('자동 로그인',
+                            style: TextStyle(letterSpacing : 0, fontSize: 15),
+                          ),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          value: _isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isChecked = value!;
+                            });
+                          },
+                          checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
+                    ),
+                    TextButton(style: TextButton.styleFrom(foregroundColor: Colors.black),
+                        onPressed: () {
+                          setState(() {
+                            Navigator.pushNamed(context, '/signup');
+                          });
+                        }, child: const Text('회원가입', style: TextStyle(fontSize: 15),)),
+                  ],
+                ),
+                ElevatedButton(onPressed: () {
+                  setState(() {
+                    Navigator.pushNamed(context, '/main');
+                  });
+                }, style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(380,45),
+                    textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    backgroundColor: Colors.grey),
+                    child: const Text('로그인')),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: SizedBox(
+          width: 380,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  '회원가입',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '아이디',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '아이디를 입력해주세요.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '비밀번호',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '비밀번호를 입력해주세요.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '비밀번호 확인',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '비밀번호를 입력해주세요.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(onPressed: () {
+                  setState(() {
+                    Navigator.pushNamed(context, '/login');
+                  });
+                }, style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(380,45),
+                    textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    backgroundColor: Colors.grey),
+                    child: const Text('회원가입하기')),
+              ],
+            ),
+          ),
         ),
       ),
     );
