@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'TimeSetting.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key, required this.title});
@@ -14,7 +15,8 @@ class _SettingsPageState extends State<SettingsPage> {
   String pass = '';
   bool _switch1 = true;
   bool _switch2 = true;
-  double _sliderValue = 10;
+  RangeValues _currentRangeValues = const RangeValues(0, 20);
+  int currentPageIndex = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),
@@ -60,7 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Column(
                   children: [
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
                     Transform.scale(
                       scale: 0.80,
@@ -74,7 +76,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
                   ],
                 ),
@@ -99,21 +101,21 @@ class _SettingsPageState extends State<SettingsPage> {
                 Column(
                   children: [
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
-                    Transform.scale(
-                      scale: 0.80,
-                      child: CupertinoSwitch(
-                        value: _switch2,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _switch2 = value;
-                          });
-                        },
-                      ),
+                    CupertinoButton(
+                      child: Text('10:00 pm'), // TimeSetting에서 저장한 값을 여기에 넣기, 저장값이 없으면 10:00 pm이 기본
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return TimeSetting(title: 'time setting result',);
+                            }
+                        );
+                      },
                     ),
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
                   ],
                 ),
@@ -138,7 +140,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Column(
                   children: [
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
                     Transform.scale(
                       scale: 0.80,
@@ -152,7 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
                   ],
                 ),
@@ -177,7 +179,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Column(
                   children: [
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
                     SliderTheme(
                       data: SliderThemeData(
@@ -190,17 +192,20 @@ class _SettingsPageState extends State<SettingsPage> {
                         trackHeight: 11.0,
                         showValueIndicator: ShowValueIndicator.never,
                       ),
-                      child: Slider(
-                          min: 0,
-                          max: 20,
-                          value: _sliderValue,
-                          divisions: 4,
-                          label: _sliderValue.toString(),
-                          onChanged: (double val) {
-                            setState(() {
-                              _sliderValue = val;
-                            });
-                          }
+                      child: RangeSlider(
+                        values: _currentRangeValues,
+                        min: 0,
+                        max: 20,
+                        divisions: 4,
+                        labels: RangeLabels(
+                          _currentRangeValues.start.round().toString(),
+                          _currentRangeValues.end.round().toString(),
+                        ),
+                        onChanged: (RangeValues values) {
+                          setState(() {
+                            _currentRangeValues = values;
+                          });
+                        },
                       ),
                     ),
                     Row(
@@ -239,7 +244,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ],
                     ),
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
                   ],
                 ),
@@ -300,6 +305,36 @@ class _SettingsPageState extends State<SettingsPage> {
               color:Colors.black
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentPageIndex,
+        onTap: (int index) {
+          setState(() {
+            currentPageIndex = index;
+            if (index == 0) {
+              Navigator.pushNamed(context, '/main');
+            } else if (index == 1) {
+              Navigator.pushNamed(context, '/calendar');
+            } else {
+              Navigator.pushNamed(context, '/settings');
+            }
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_filled),
+            label: '홈',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today_rounded),
+            label: '캘린더',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_rounded),
+            label: '설정',
+          ),
+        ],
+        selectedItemColor: Colors.lightBlue,
       ),
     );
   }

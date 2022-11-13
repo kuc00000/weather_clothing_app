@@ -11,6 +11,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   String pass = '';
+  int currentPageIndex = 0;
 
   @override
 
@@ -38,14 +39,38 @@ class _MainPageState extends State<MainPage> {
                 fontSize: 24,
               ),
             ),
-            TextButton(style: TextButton.styleFrom(foregroundColor: Colors.black),
-                onPressed: () {
-                  setState(() {
-                    Navigator.pushNamed(context, '/settings');
-                  });
-                }, child: const Text('설정화면', style: TextStyle(fontSize: 15),)),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentPageIndex,
+        onTap: (int index) {
+          setState(() {
+            currentPageIndex = index;
+            if (index == 0) {
+              Navigator.pushNamed(context, '/main');
+            } else if (index == 1) {
+              Navigator.pushNamed(context, '/calendar');
+            } else {
+              Navigator.pushNamed(context, '/settings');
+            }
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_filled),
+            label: '홈',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today_rounded),
+            label: '캘린더',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_rounded),
+            label: '설정',
+          ),
+        ],
+        selectedItemColor: Colors.lightBlue,
       ),
     );
   }

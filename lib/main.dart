@@ -8,7 +8,6 @@ import 'CalendarPage.dart';
 import 'SettingsPage.dart';
 import 'LoginPage.dart';
 import 'SignupPage.dart';
-import 'ResultPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,7 +40,6 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsPage(title: 'Settings',),
         '/login': (context) => const LoginPage(title: 'Login',),
         '/signup': (context) => const SignupPage(title: 'Signup',),
-        '/result': (context) => const ResultPage(title: 'Result',),
       },
     );
   }
