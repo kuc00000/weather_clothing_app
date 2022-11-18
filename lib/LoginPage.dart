@@ -107,7 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                 }, style: ElevatedButton.styleFrom(
                     minimumSize: const Size(380,45),
                     textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    backgroundColor: Colors.grey),
+                    //backgroundColor: Colors.grey
+                ),
                     child: const Text('로그인')),
               ],
             ),

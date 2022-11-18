@@ -122,7 +122,8 @@ class _SelectPageState extends State<SelectPage> {
             }, style: ElevatedButton.styleFrom(
                 minimumSize: const Size(385,40),
                 textStyle: const TextStyle(fontSize: 15),
-                backgroundColor: Colors.grey),
+                //backgroundColor: Colors.grey
+            ),
                 child: const Text('옷 추가 완료')
             ),
           ],
