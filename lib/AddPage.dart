@@ -15,6 +15,7 @@ class _AddPageState extends State<AddPage> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -52,7 +53,7 @@ class _AddPageState extends State<AddPage> {
             ),
             ElevatedButton(onPressed: () {
               setState(() {
-                Navigator.pushNamed(context, '/select');
+                Navigator.pushNamed(context, '/select',arguments:{'temp':args['temp'],'feels_like':args['feels_like'],'pm10':args['pm10'],'pm2_5':args['pm2_5'],'pop':args['pop']});
               });
             },style: ElevatedButton.styleFrom(
               minimumSize: const Size(40,40),

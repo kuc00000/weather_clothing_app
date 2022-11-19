@@ -10,6 +10,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+
   String pass = '';
   String locationDropdownValue = '암사동';
   int currentPageIndex = 0;
@@ -17,6 +19,13 @@ class _MainPageState extends State<MainPage> {
   @override
 
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments as Map;
+    final pop = args['pop'];
+    final pm10 = args['pm10'];
+    final pm2_5 = args['pm2_5'];
+    final temp = args['temp'];
+    final feels_like = args['feels_like'];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -82,8 +91,8 @@ class _MainPageState extends State<MainPage> {
                     const SizedBox(
                       width: 5,
                     ),
-                    const Text(
-                      '강수확률 60%',
+                     Text(
+                      '강수확률 $pop%',
                       style: TextStyle(
                         fontSize: 14,
                       ),
@@ -103,8 +112,8 @@ class _MainPageState extends State<MainPage> {
                     const SizedBox(
                       width: 5,
                     ),
-                    const Text(
-                      '미세먼지 많음',
+                     Text(
+                      '미세먼지 $pm10',
                       style: TextStyle(
                         fontSize: 14,
                       ),
@@ -123,11 +132,11 @@ class _MainPageState extends State<MainPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '20℃',
+                        '$temp℃',
                         style: TextStyle(fontSize: 40,),
                       ),
                       Text(
-                        '체감온도 18℃',
+                        '체감온도 $feels_like ℃',
                         style: TextStyle(fontSize: 14,),
                       ),
                       const SizedBox(
