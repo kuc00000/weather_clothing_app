@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'UserInfomation.dart';
 import 'mainColor.dart';
+
 
 class SignupPage extends StatelessWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -97,6 +100,12 @@ class _SignupFormState extends State<SignupForm> {
 
                 ),
               ),
+              validator: (value){
+                if (value!.length < 6){
+                  return '비밀번호가 너무 짧습니다.';
+                }
+                return null;
+              },
               onChanged: (value){
                 password1 = value;
               },
@@ -131,47 +140,40 @@ class _SignupFormState extends State<SignupForm> {
             const SizedBox(height: 20,),
             ElevatedButton(
               onPressed:() async {
-                final newUser;
+                String notice='';
                 if (password1 == password2){
                   password = password1;
-                  newUser = await _authentication.createUserWithEmailAndPassword(
-                      email: email, password: password);
-                  if (newUser.user !=null){
+                  notice = '회원가입이 완료되었습니다.';
+                  var newUser = context.read<Users>().trySignup(email,password);
+                  if (newUser !=null){
                     _formKey.currentState!.reset();
                     if (!mounted) return ;
-                    showDialog(context: context,
-                        builder: (context) => SimpleDialog(
-                          title: Center(child: const Text('안내문')),
-                          contentPadding: const EdgeInsets.all(10),
-                          children: [
-                            Center(child: Text('회원가입이 완료되었습니다.')),
-                            TextButton(onPressed:
-                                (){
-                              Navigator.popUntil(context, (route) => route.isFirst);
-                            }, child: Text('확인'))
-                          ],
-                        )
-                    );
                   }
                 }
                 else{
+                  notice = '비밀번호가 일치하지 않습니다.';
                   if(_formKey.currentState!.validate()){
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('히히')));
                   }
-                  showDialog(context: context,
-                      builder: (context) => SimpleDialog(
-                        title: Center(child: const Text('안내문')),
-                        contentPadding: const EdgeInsets.all(10),
-                        children: [
-                          Center(child: Text('비밀번호가 일치하지 않습니다.')),
-                          TextButton(onPressed:
-                              (){
-                            Navigator.of(context).pop();
-                          }, child: Text('확인'))
-                        ],
-                      )
-                  );
                 }
+                showDialog(context: context,
+                    builder: (context) => SimpleDialog(
+                      title: const Center(child: Text('안내문')),
+                      contentPadding: const EdgeInsets.all(10),
+                      children: [
+                        Center(child: Text(notice)),
+                        TextButton(onPressed:
+                            (){
+                          if (password1 == password2){
+                            Navigator.popUntil(context, (route) => route.isFirst);
+                          }
+                          else{
+                            Navigator.of(context).pop();
+                          }
+                        }, child: Text('확인'))
+                      ],
+                    )
+                );
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.mainColor
