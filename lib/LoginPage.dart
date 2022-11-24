@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'mainColor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'UserInfomation.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: LoginForm(),
     );
@@ -36,16 +38,12 @@ class _LoginFormState extends State<LoginForm> {
         key: _formKey,
         child: ListView(
           children: [
-            const SizedBox(
-              height: 60,
-            ),
+            const SizedBox(height: 60,),
             Image.asset(
               'appbar.png',
               height: 60,
             ),
-            const SizedBox(
-              height: 70,
-            ),
+            const SizedBox(height: 70,),
             TextFormField(
               decoration: const InputDecoration(
                 labelStyle: TextStyle(
@@ -58,16 +56,13 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.mainColor),
-
                 ),
               ),
               onChanged: (value){
                 email = value;
               },
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20,),
             TextFormField(
               obscureText: true,
               decoration: const InputDecoration(
@@ -88,44 +83,38 @@ class _LoginFormState extends State<LoginForm> {
                 password = value;
               },
             ),
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20,),
             ElevatedButton(
-              onPressed: (){
-                Navigator.pushNamed(context, '/location');
-
-                // onPressed:() async {
-                //   setState(() {
-                //    showSpinner=true;
-                //   });
-                //   try{
-                //     final currentUser = await _authentication.signInWithEmailAndPassword(
-                //         email: email, password: password);
-                //     setState(() {
-                //       showSpinner=false;
-                //     });
-                //     if (currentUser.user!=null){
-                //       _formKey.currentState!.reset();
-                //       if(!mounted) return;
-                //       Navigator.pushNamed(context, '/closet');
-                //     }
-                //   }
-                //   catch(e){
-                //     showDialog(context: context,
-                //         builder: (context) => SimpleDialog(
-                //           title: Center(child: const Text('안내문')),
-                //           contentPadding: const EdgeInsets.all(10),
-                //           children: [
-                //             Center(child: Text(e.toString())),
-                //             TextButton(onPressed:
-                //                 (){
-                //               Navigator.of(context).pop();
-                //             }, child: Text('확인'))
-                //           ],
-                //         )
-                //     );
-                //   }
+                onPressed:() async {
+                  setState(() {
+                   showSpinner=true;
+                  });
+                  try{
+                    final currentUser = context.read<Users>().tryLogin(email, password);
+                    setState(() {
+                      showSpinner=false;
+                    });
+                    if (currentUser!=null){
+                      _formKey.currentState!.reset();
+                      if(!mounted) return;
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/location');
+                    }
+                  }
+                  catch(e){
+                    showDialog(context: context,
+                        builder: (context) => SimpleDialog(
+                          title: const Center(child: Text('안내문')),
+                          contentPadding: const EdgeInsets.all(10),
+                          children: [
+                            Center(child: Text(e.toString())),
+                            TextButton(onPressed:(){
+                              Navigator.of(context).pop();
+                            }, child: const Text('확인'))
+                          ],
+                        )
+                    );
+                  }
 
               },
               style: ElevatedButton.styleFrom(

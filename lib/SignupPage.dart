@@ -11,7 +11,7 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: SignupForm(),
     );
@@ -33,6 +33,7 @@ class _SignupFormState extends State<SignupForm> {
   String password = '';
   bool showSpinner = false;
   int _sex=0;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -61,9 +62,7 @@ class _SignupFormState extends State<SignupForm> {
                 });
               },
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20,),
             TextFormField(
               decoration: const InputDecoration(
                 labelStyle: TextStyle(
@@ -76,7 +75,6 @@ class _SignupFormState extends State<SignupForm> {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.mainColor),
-
                 ),
               ),
               onChanged: (value){
@@ -97,7 +95,6 @@ class _SignupFormState extends State<SignupForm> {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.mainColor),
-
                 ),
               ),
               validator: (value){
@@ -124,7 +121,6 @@ class _SignupFormState extends State<SignupForm> {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.mainColor),
-
                 ),
               ),
               validator: (value){
