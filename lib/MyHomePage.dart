@@ -150,8 +150,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.title),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Image.asset(
+          'appbar.png',
+          height: 45,
+        ),
       ),
       body: Center(
         child: Column(

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "344408117120",
+    "project_id": "weather-clothing-app",
+    "storage_bucket": "weather-clothing-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344408117120:android:21b9d89f154ddf1fbbbb65",
+        "android_client_info": {
+          "package_name": "com.example.mobile_app_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344408117120-d5b1g923p5coipmtmnp17gkbjbvhck1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ6SVdDDeb1kFYZtk0cy-vZqnWLyu-1gk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344408117120-d5b1g923p5coipmtmnp17gkbjbvhck1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'mainColor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  //final _authentication = FirebaseAuth.instance;
+  final _authentication = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   String email='';
   String password = '';
@@ -92,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             ElevatedButton(
               onPressed: (){
-                Navigator.pushNamed(context, '/closet');
+                Navigator.pushNamed(context, '/location');
 
                 // onPressed:() async {
                 //   setState(() {
