@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: buildMaterialColor(const Color(0xff78E2DF)),
       ),
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
         // 로딩화면 -> 동네 설정 화면 바로 나오면 안 되고, 로그인화면 먼저 나와야 할 듯
         // 최초 로그인일 경우에만 동네 설정 화면 띄우기
         // 이 기능이 어렵다면, 동네 설정 화면은 제거하고 홈화면에서 gps 버튼 눌러 설정할 수 있도록 함
-        '/': (context) => const LoginPage(title: 'Login',),
+        '/': (context) => const LoginPage(),
         '/location': (context) => const MyHomePage(title: 'Location',),
         '/add': (context) => const AddPage(title: 'Add Cloth',),
         '/select': (context) => const SelectPage(title: 'Select Closet',),
@@ -58,8 +59,8 @@ class MyApp extends StatelessWidget {
         '/main': (context) => const MainPage(title: 'Main',),
         '/calendar': (context) => const CalendarPage(title: 'Calendar',),
         '/settings': (context) => const SettingsPage(title: 'Settings',),
-        '/login': (context) => const LoginPage(title: 'Login',),
-        '/signup': (context) => const SignupPage(title: 'Signup',),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
       },
     );
   }
