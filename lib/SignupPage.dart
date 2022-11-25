@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'UserInfomation.dart';
 import 'mainColor.dart';
 
 
@@ -32,6 +30,7 @@ class _SignupFormState extends State<SignupForm> {
   String password2 = '';
   String password = '';
   bool showSpinner = false;
+  bool error = false;
   int _sex=0;
 
   @override
@@ -48,6 +47,8 @@ class _SignupFormState extends State<SignupForm> {
               height: 60,
             ),
             const SizedBox(height: 55,),
+
+            /* 성별 */
             CupertinoSlidingSegmentedControl(
               padding: const EdgeInsets.all(5),
               children: const {
@@ -63,6 +64,8 @@ class _SignupFormState extends State<SignupForm> {
               },
             ),
             const SizedBox(height: 20,),
+
+            /* 이메일 */
             TextFormField(
               decoration: const InputDecoration(
                 labelStyle: TextStyle(
@@ -82,6 +85,8 @@ class _SignupFormState extends State<SignupForm> {
               },
             ),
             const SizedBox( height: 20,),
+
+            /* 비밀번호 */
             TextFormField(
               obscureText: true,
               decoration: const InputDecoration(
@@ -97,12 +102,6 @@ class _SignupFormState extends State<SignupForm> {
                   borderSide: BorderSide(color: AppColor.mainColor),
                 ),
               ),
-              validator: (value){
-                if (value!.length < 6){
-                  return '비밀번호가 너무 짧습니다.';
-                }
-                return null;
-              },
               onChanged: (value){
                 password1 = value;
               },
@@ -123,53 +122,62 @@ class _SignupFormState extends State<SignupForm> {
                   borderSide: BorderSide(color: AppColor.mainColor),
                 ),
               ),
-              validator: (value){
-                if (value!=password1){
-                  return '비밀번호가 일치하지 않습니다.';
-                }
-                return null;
-              },
               onChanged: (value){
                 password2 = value;
               },
             ),
             const SizedBox(height: 20,),
+            
+            /* 회원가입 로직 */
             ElevatedButton(
               onPressed:() async {
                 String notice='';
-                if (password1 == password2){
+                if (password1 == password2 ){
                   password = password1;
-                  notice = '회원가입이 완료되었습니다.';
-                  var newUser = context.read<Users>().trySignup(email,password);
-                  if (newUser !=null){
-                    _formKey.currentState!.reset();
-                    if (!mounted) return ;
+                  try{
+                    notice = '회원가입이 완료되었습니다.';
+                    error = false;
+                    final newUser = await _authentication.createUserWithEmailAndPassword(
+                        email: email, password: password);
+                    if (newUser.user !=null){
+                      _formKey.currentState!.reset();
+                      if (!mounted) return ;
+                    }
+                  }
+                  /* 회원가입 에러메세지 번역 */
+                  catch(e){
+                    error = true;
+                    notice = e.toString();
+                    if (notice=='[firebase_auth/weak-password] Password should be at least 6 characters'){
+                      notice = '비밀번호를 최소 6자리 이상 입력해주세요';
+                    }else if(notice=='[firebase_auth/invalid-email] The email address is badly formatted.'){
+                      notice = '올바르지 않은 이메일 형식입니다.';
+                    }else if(notice=='[firebase_auth/unknown] Given String is empty or null'){
+                      notice = '값을 입력해주세요.';
+                    }
                   }
                 }
                 else{
+                  error = true;
                   notice = '비밀번호가 일치하지 않습니다.';
-                  if(_formKey.currentState!.validate()){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('히히')));
-                  }
                 }
-                showDialog(context: context,
-                    builder: (context) => SimpleDialog(
-                      title: const Center(child: Text('안내문')),
-                      contentPadding: const EdgeInsets.all(10),
-                      children: [
-                        Center(child: Text(notice)),
-                        TextButton(onPressed:
-                            (){
-                          if (password1 == password2){
-                            Navigator.popUntil(context, (route) => route.isFirst);
-                          }
-                          else{
-                            Navigator.of(context).pop();
-                          }
-                        }, child: Text('확인'))
-                      ],
-                    )
-                );
+                if (error){
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(notice)));
+                }
+                else{
+                  showDialog(context: context,
+                      builder: (context) => SimpleDialog(
+                        title: const Center(child: Text('안내문')),
+                        contentPadding: const EdgeInsets.all(10),
+                        children: [
+                          Center(child: Text(notice)),
+                          TextButton(
+                              onPressed: (){ Navigator.popUntil(context, (route) => route.isFirst);},
+                              child: const Text('확인'))
+                        ],
+                      )
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.mainColor

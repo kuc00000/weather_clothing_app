@@ -85,37 +85,40 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 20,),
             ElevatedButton(
-                onPressed:() async {
+              onPressed:() async {
                   setState(() {
                    showSpinner=true;
                   });
                   try{
-                    final currentUser = context.read<Users>().tryLogin(email, password);
+                    final currentUser = await _authentication.signInWithEmailAndPassword(
+                        email: email, password: password);
                     setState(() {
                       showSpinner=false;
                     });
-                    if (currentUser!=null){
+                    if (currentUser.user!=null){
                       _formKey.currentState!.reset();
                       if(!mounted) return;
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/location');
+                      Navigator.pushNamed(context, '/closet');
                     }
                   }
+                  /* 로그인 에러메세지 번역 */
                   catch(e){
-                    showDialog(context: context,
-                        builder: (context) => SimpleDialog(
-                          title: const Center(child: Text('안내문')),
-                          contentPadding: const EdgeInsets.all(10),
-                          children: [
-                            Center(child: Text(e.toString())),
-                            TextButton(onPressed:(){
-                              Navigator.of(context).pop();
-                            }, child: const Text('확인'))
-                          ],
-                        )
+                    String error = e.toString();
+                    if (error == '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.'){
+                      error = '등록된 회원정보가 없습니다.';
+                    } else if(error == '[firebase_auth/invalid-email] The email address is badly formatted.'){
+                      error = '이메일 형식이 잘못되었습니다.';
+                    } else if (error=='[firebase_auth/unknown] Given String is empty or null'){
+                      error = '값을 입력해주세요.';
+                    } else if (error == '[firebase_auth/wrong-password] The password is invalid or the user does not have a password.'){
+                      error = '비밀번호가 틀렸습니다.';
+                    } else if (error =='[firebase_auth/too-many-requests] We have blocked all requests from this device due to unusual activity. Try again later.'){
+                      error = '요청이 너무 많습니다. 잠시후 다시 시도해주세요.';
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content:Text(error))
                     );
                   }
-
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.mainColor
