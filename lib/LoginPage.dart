@@ -3,6 +3,7 @@ import 'mainColor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'UserInfomation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -29,6 +30,34 @@ class _LoginFormState extends State<LoginForm> {
   String password = '';
   bool showSpinner = false;
   bool autoLogin = false;
+
+  //
+  String? UserInfo='';
+  String? autoCheck='';
+
+  /* 자동 로그인 코드 */
+  static final storage = FlutterSecureStorage();
+  @override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _asyncMethod();
+    });
+  }
+  _asyncMethod() async {
+    autoCheck = (await storage.read(key: "autologin"));
+    if (autoCheck=='true'){
+      UserInfo = (await storage.read(key: "login"));
+      if (UserInfo != null){
+        final currentUser = await _authentication.signInWithEmailAndPassword(
+            email: UserInfo!.split(' ')[0], password: UserInfo!.split(' ')[1]);
+        if (currentUser!=null){
+          Navigator.pop(context);
+          Navigator.pushNamed(context, '/closet');
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +118,7 @@ class _LoginFormState extends State<LoginForm> {
                   setState(() {
                    showSpinner=true;
                   });
+                  /* 정상적으로 로그인 되었을때 */
                   try{
                     final currentUser = await _authentication.signInWithEmailAndPassword(
                         email: email, password: password);
@@ -97,7 +127,9 @@ class _LoginFormState extends State<LoginForm> {
                     });
                     if (currentUser.user!=null){
                       _formKey.currentState!.reset();
+                      await storage.write(key: "login", value: email+' '+password);
                       if(!mounted) return;
+                      Navigator.pop(context);
                       Navigator.pushNamed(context, '/closet');
                     }
                   }
@@ -116,8 +148,9 @@ class _LoginFormState extends State<LoginForm> {
                       error = '요청이 너무 많습니다. 잠시후 다시 시도해주세요.';
                     }
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content:Text(error))
+                        SnackBar(content:Text(error,textAlign: TextAlign.center,))
                     );
+                    storage.delete(key: 'login');
                   }
               },
               style: ElevatedButton.styleFrom(
@@ -133,23 +166,34 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Checkbox(
-                    activeColor: AppColor.mainColor,
-                    value: autoLogin,
-                    onChanged: (value){
-                      setState(() {
-                        autoLogin = value!;
-                      });
-                    }),
-                const Text('자동로그인'),
-                const SizedBox(width: 170,),
+                Row(
+                  children: [
+                    Checkbox(
+                        activeColor: AppColor.mainColor,
+                        value: autoLogin,
+                        onChanged: (value) async {
+                          setState(() {
+                            autoLogin = value!;
+                          });
+                          print(autoLogin);
+                          await storage.write(key: "autologin", value: autoLogin.toString());
+                        }),
+                    const Text('자동로그인',style: TextStyle(fontSize: 17),),
+                  ],
+                ),
                 TextButton(onPressed: (){
+                  _formKey.currentState!.reset();
                   Navigator.pushNamed(context, '/signup');
-                }, child: const Text('회원가입',
-                  style: TextStyle(
-                      color: AppColor.mainColor
-                  ),))
+                }, child: Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: const Text('회원가입',
+                    style: TextStyle(
+                      fontSize: 20,
+                        color: AppColor.mainColor
+                    ),),
+                ))
               ],
             )
           ],
