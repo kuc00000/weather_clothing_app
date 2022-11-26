@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'mainColor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'UserInfomation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatelessWidget {
@@ -51,7 +49,8 @@ class _LoginFormState extends State<LoginForm> {
       if (UserInfo != null){
         final currentUser = await _authentication.signInWithEmailAndPassword(
             email: UserInfo!.split(' ')[0], password: UserInfo!.split(' ')[1]);
-        if (currentUser!=null){
+        if (currentUser.user!=null){
+          if(!mounted) return;
           Navigator.pop(context);
           Navigator.pushNamed(context, '/closet');
         }

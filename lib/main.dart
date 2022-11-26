@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
             '/location': (context) => const MyHomePage(title: 'Location',),
             '/add': (context) => const AddPage(title: 'Add Cloth',),
             '/select': (context) => const SelectPage(title: 'Select Closet',),
-            '/closet': (context) => const MyClosetPage(title: 'My Closet',),
+            '/closet': (context) => const MyClosetPage(),
             '/main': (context) => const MainPage(title: 'Main',),
             '/calendar': (context) => const CalendarPage(title: 'Calendar',),
             '/settings': (context) => const SettingsPage(title: 'Settings',),

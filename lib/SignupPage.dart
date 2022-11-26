@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'mainColor.dart';
 
 
@@ -139,6 +140,11 @@ class _SignupFormState extends State<SignupForm> {
                     error = false;
                     final newUser = await _authentication.createUserWithEmailAndPassword(
                         email: email, password: password);
+                    await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid).set({
+                      'email' : email,
+                      'userSex' : _sex,
+                      'uid':newUser.user!.uid
+                    });
                     if (newUser.user !=null){
                       _formKey.currentState!.reset();
                       if (!mounted) return ;

@@ -45,6 +45,7 @@ dependencies:
   firebase_auth: ^4.1.4
   provider: ^6.0.4
   flutter_secure_storage: ^6.1.0
+  cloud_firestore: ^4.1.0
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +72,44 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - appbar.png
+    - bottom1.png
+    - bottom2.png
+    - bottom3.png
+    - bottom4.png
+    - bottom5.png
+    - bottom6.png
+    - bottom7.png
+    - bottom8.png
+    - bottom9.png
+    - top1.png
+    - top2.png
+    - top3.png
+    - top4.png
+    - top5.png
+    - top6.png
+    - top7.png
+    - top8.png
+    - top9.png
+    - top10.png
+    - top11.png
+    - top12.png
+    - top13.png
+    - outer1.png
+    - outer2.png
+    - outer3.png
+    - outer4.png
+    - outer5.png
+    - outer6.png
+    - outer7.png
+    - outer8.png
+    - outer9.png
+    - outer10.png
+    - outer11.png
+    - outer12.png
+    - outer13.png
+    - outer14.png
+    - outer15.png
+    - outer16.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
