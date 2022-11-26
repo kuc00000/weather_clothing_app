@@ -34,6 +34,10 @@ class _SignupFormState extends State<SignupForm> {
   bool error = false;
   int _sex=0;
 
+  List<bool> myOuter = List.generate(16, (i) => false);
+  List<bool> myTop = List.generate(13, (i) => false);
+  List<bool> myBottom = List.generate(9, (i) => false);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -142,8 +146,11 @@ class _SignupFormState extends State<SignupForm> {
                         email: email, password: password);
                     await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid).set({
                       'email' : email,
+                      'uid':newUser.user!.uid,
                       'userSex' : _sex,
-                      'uid':newUser.user!.uid
+                      'outer':myOuter,
+                      'top':myTop,
+                      'bottom':myBottom
                     });
                     if (newUser.user !=null){
                       _formKey.currentState!.reset();

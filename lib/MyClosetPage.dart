@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'mainColor.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'UserInfomation.dart';
+import 'package:provider/provider.dart';
 
 class MyClosetPage extends StatefulWidget {
   const MyClosetPage({Key? key}) : super(key: key);
@@ -12,14 +14,21 @@ class MyClosetPage extends StatefulWidget {
 }
 
 class _MyClosetPageState extends State<MyClosetPage> {
+  final _authentication = FirebaseAuth.instance;
   int _currentStep = 0;
   List<bool> steps = [true,false,false];
-  List<int> outer = List.generate(16, (i) => i+1);
-  List<int> manTop = List.generate(8, (i) => i+1);
-  List<int> manBottom = List.generate(5, (i) => i+1);
+  List<int> outer = List.generate(16, (i) => i);
+  List<int> manTop = List.generate(8, (i) => i);
+  List<int> manBottom = List.generate(5, (i) => i);
 
-  List<int> womanTop = List.generate(13, (i) => i+1);
-  List<int> womanBottom = List.generate(9, (i) => i+1);
+  List<int> womanTop = List.generate(13, (i) => i);
+  List<int> womanBottom = List.generate(9, (i) => i);
+
+  var myOuter;
+  var myTop;
+  var myBottom;
+  // List<bool> myTop = List.generate(13, (i) => false);
+  // List<bool> myBottom = List.generate(9, (i) => false);
 
   int userSex = 0;
 
@@ -30,12 +39,18 @@ class _MyClosetPageState extends State<MyClosetPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _asyncMethod();
+      context.read<Users>().readDB();
     });
   }
   _asyncMethod() async {
     final userInfo = await FirebaseFirestore.instance.collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid).get();
-    userSex = userInfo.data()!['userSex'];
+    userSex = userInfo.data()!['userSex'] ;
+    myOuter = userInfo.data()!['outer'];
+    // print(myOuter);
+    myTop = userInfo.data()!['top'];
+    myBottom = userInfo.data()!['bottom'];
+    // print(context.watch<Users>().userSex);
   }
 
   @override
@@ -69,7 +84,7 @@ class _MyClosetPageState extends State<MyClosetPage> {
             Step(
                 title: Text('상의',style: TextStyle(fontSize: 20),),
                 content: Container(
-                  height: MediaQuery.of(context).size.height-240,
+                  height: MediaQuery.of(context).size.height-280,
                   child : GridView.count(crossAxisCount: 3,
                     children:
                         userSex==0?
@@ -83,7 +98,7 @@ class _MyClosetPageState extends State<MyClosetPage> {
             Step(
                 title: Text('하의',style: TextStyle(fontSize: 20),),
                 content: Container(
-                  height: MediaQuery.of(context).size.height-240,
+                  height: MediaQuery.of(context).size.height-280,
                   child : GridView.count(crossAxisCount: 3,
                     children:
                         userSex==0?
@@ -97,7 +112,7 @@ class _MyClosetPageState extends State<MyClosetPage> {
             Step(
                 title: Text('아우터',style: TextStyle(fontSize: 20),),
                 content: Container(
-                  height: MediaQuery.of(context).size.height-240,
+                  height: MediaQuery.of(context).size.height-280,
                   child : GridView.count(crossAxisCount: 3,
                     children:
                     outer.map((i)=>BTN2(imageName: i,pos: 'outer',)).toList()
@@ -150,7 +165,18 @@ class _MyClosetPageState extends State<MyClosetPage> {
                             fontSize: MediaQuery.of(context).size.width/20),),
                       )),
                   TextButton(
-                      onPressed:(){},
+                      onPressed:()async {
+                        await FirebaseFirestore.instance
+                            .collection('user')
+                            .doc(_authentication.currentUser!.uid)
+                            .update({
+                        'outer':context.read<Users>().myOuter,
+                        'top':context.read<Users>().myTop,
+                        'bottom':context.read<Users>().myBottom
+                      });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content:Text('저장되었습니다.',textAlign: TextAlign.center,)));
+                      },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15,bottom: 15,right: 15,left: 15),
                         child: Text('저장하기',style: TextStyle(fontSize: MediaQuery.of(context).size.width/20),),
@@ -180,7 +206,7 @@ class BTN2 extends StatefulWidget {
 }
 
 class _BTN2State extends State<BTN2> {
-  Color curColor=Colors.white;
+  Color curColor=AppColor.mainColor;
   bool checked = false;
   List<String> outers=['바람막이', '청자켓','야상','트러커자켓','가디건',
     '플리스','야구잠바','항공잠바','가죽자켓','환절기코트','조끼패딩',
@@ -191,6 +217,26 @@ class _BTN2State extends State<BTN2> {
   ,'여름스커트','봄가을스커트','레깅스','겨울스커트'];
 
   @override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _asyncMethod();
+    });
+  }
+  _asyncMethod() async {
+    final userInfo = await FirebaseFirestore.instance.collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid).get();
+    checked = userInfo.data()![widget.pos][widget.imageName];
+    setState(() {
+      if (checked){
+        curColor == AppColor.mainColor;
+      } else{
+        curColor == Colors.white;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       //color: Colors.red,
@@ -199,7 +245,13 @@ class _BTN2State extends State<BTN2> {
       child: GestureDetector(
         onTap: (){
           setState(() {
-            curColor == AppColor.mainColor? curColor = Colors.white:curColor = AppColor.mainColor;
+            curColor == AppColor.mainColor?
+              curColor = Colors.white
+              :curColor = AppColor.mainColor;
+            curColor == AppColor.mainColor?
+              checked=true :checked=false;
+
+            context.read<Users>().addCloset(widget.pos, widget.imageName, checked);
           });
         },
         child: Stack(
@@ -212,7 +264,7 @@ class _BTN2State extends State<BTN2> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   boxShadow: [
                     BoxShadow(
-                      color: curColor,
+                      color: checked?AppColor.mainColor:Colors.white,
                       //   offset: Offset(4.0, 4.0),
                       blurRadius: 10.0,
                       //   spreadRadius: 1.0,
@@ -246,8 +298,8 @@ class _BTN2State extends State<BTN2> {
                     height: MediaQuery.of(context).size.height/45,
                     child: FittedBox(
                       child: Text(
-                        widget.pos=='top'?tops[widget.imageName!-1]:
-                      widget.pos=='bottom'?bottoms[widget.imageName!-1]:outers[widget.imageName!-1],
+                        widget.pos=='top'?tops[widget.imageName!]:
+                      widget.pos=='bottom'?bottoms[widget.imageName!]:outers[widget.imageName!],
                       style: TextStyle(fontWeight: FontWeight.bold),),
                     ),
                   ),
