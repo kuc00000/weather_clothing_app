@@ -28,6 +28,7 @@ class _LoginFormState extends State<LoginForm> {
   String password = '';
   bool showSpinner = false;
   bool autoLogin = false;
+  bool devLogin = false;
 
   //
   String? UserInfo='';
@@ -194,7 +195,24 @@ class _LoginFormState extends State<LoginForm> {
                     ),),
                 ))
               ],
-            )
+            ),
+            
+            /* 나중에 제거하기 */
+            Row(
+              children: [
+                Checkbox(
+                    activeColor: AppColor.mainColor,
+                    value: devLogin,
+                    onChanged: (value) async {
+                      setState(() {
+                        devLogin = value!;
+                      });
+                      email = '1122@naver.com';
+                      password = '11221122';
+                      await storage.write(key: "autologin", value: devLogin.toString());
+                    }),
+              ],
+            ),
           ],
         ),
       ),
