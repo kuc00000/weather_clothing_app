@@ -148,7 +148,7 @@ class _LoginFormState extends State<LoginForm> {
                       error = '요청이 너무 많습니다. 잠시후 다시 시도해주세요.';
                     }
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content:Text(error,textAlign: TextAlign.center,))
+                        SnackBar(content:Text(error,textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),)
                     );
                     storage.delete(key: 'login');
                   }
@@ -207,8 +207,13 @@ class _LoginFormState extends State<LoginForm> {
                       setState(() {
                         devLogin = value!;
                       });
-                      email = '1122@naver.com';
-                      password = '11221122';
+                      if (devLogin){
+                        email = '1122@naver.com';
+                        password = '11221122';
+                      } else{
+                        email='';
+                        password='';
+                      }
                       await storage.write(key: "autologin", value: devLogin.toString());
                     }),
               ],

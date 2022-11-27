@@ -65,6 +65,7 @@ class _MyClosetPageState extends State<MyClosetPage> {
         actions: [
           /* 로그아웃 코드 */
           IconButton(onPressed: (){
+            context.read<Users>().readDB();
             FirebaseAuth.instance.signOut();
             storage.delete(key: 'login');
             Navigator.pop(context);
@@ -174,8 +175,11 @@ class _MyClosetPageState extends State<MyClosetPage> {
                         'top':context.read<Users>().myTop,
                         'bottom':context.read<Users>().myBottom
                       });
+                        context.read<Users>().setCloset('outer', myOuter);
+                        context.read<Users>().setCloset('top', myTop);
+                        context.read<Users>().setCloset('bottom', myBottom);
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content:Text('저장되었습니다.',textAlign: TextAlign.center,)));
+                            SnackBar(content:Text('저장되었습니다.',textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),));
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15,bottom: 15,right: 15,left: 15),

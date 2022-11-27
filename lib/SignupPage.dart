@@ -175,7 +175,7 @@ class _SignupFormState extends State<SignupForm> {
                   notice = '비밀번호가 일치하지 않습니다.';
                 }
                 if (error){
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(notice,textAlign: TextAlign.center,)));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(notice,textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),));
                 }
                 else{
                   showDialog(context: context,
