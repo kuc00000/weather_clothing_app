@@ -187,7 +187,7 @@ class _WeekClothListState extends State<WeekClothList> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      width: 110,
+                      width: 100,
                       alignment: Alignment.center,
                       child: Text('${(7 - index).toString()}일 전',
                         style: TextStyle(
