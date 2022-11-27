@@ -33,7 +33,8 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       body: Column(
         children: [
-          Card(
+          SizedBox(
+            height: 370,
             child: TableCalendar(
               calendarBuilders: CalendarBuilders(
                 dowBuilder: (context, day) {
@@ -119,6 +120,7 @@ class _CalendarPageState extends State<CalendarPage> {
               ],
             ),
           ),
+          WeekClothList(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -154,3 +156,117 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 }
+
+class WeekClothList extends StatefulWidget {
+
+  @override
+  State<WeekClothList> createState() => _WeekClothListState();
+}
+
+class _WeekClothListState extends State<WeekClothList> {
+
+  final List<String> clothingOuter = <String>['환절기 코트', '가죽자켓', '가죽자켓', '가죽자켓', '가죽자켓', '가죽자켓', '가죽자켓'];
+  final List<String> clothingTop = <String>['반팔티셔츠', '반팔티셔츠', '반팔티셔츠', '반팔티셔츠', '반팔티셔츠', '상의 없음', '상의 없음'];
+  final List<String> clothingBottom = <String>['코튼팬츠', '코튼팬츠', '코튼팬츠', '코튼팬츠', '코튼팬츠', '하의 없음', '하의 없음'];
+  final List<String> clothingDress = <String>['원피스 없음', '원피스 없음', '원피스 없음', '원피스 없음', '원피스 없음', '봄가을용 원피스', '겨울용 원피스'];
+  final List<String> feedbacks = <String>['약간 더웠음', '매우 더웠음', '약간 추웠음', '매우 추웠음', '보통', '약간 더웠음', '약간 더웠음'];
+  final List<String> maxDayTemperature = <String>['24', '24', '25', '23', '20', '18', '16'];
+  final List<String> minDayTemperature = <String>['14', '14', '15', '13', '10', '08', '06'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: 7,
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            children: [
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: 100,
+                      alignment: Alignment.center,
+                      child: Text('${(7 - index).toString()}일 전',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          width: 110,
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: [
+                              Text('${minDayTemperature[index]} ~ ${minDayTemperature[index]} ℃',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text('${feedbacks[index]}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: 120,
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('- ${clothingOuter[index]}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text('- ${clothingTop[index]}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text('- ${clothingBottom[index]}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text('- ${clothingDress[index]}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+

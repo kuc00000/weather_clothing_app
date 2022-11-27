@@ -100,9 +100,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 Column(
                   children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
                     CupertinoButton(
                       child: Text('10:00 pm'), // TimeSetting에서 저장한 값을 여기에 넣기, 저장값이 없으면 10:00 pm이 기본
                       onPressed: () {
@@ -113,9 +110,6 @@ class _SettingsPageState extends State<SettingsPage> {
                             }
                         );
                       },
-                    ),
-                    const SizedBox(
-                      height: 5,
                     ),
                   ],
                 ),
