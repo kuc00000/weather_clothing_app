@@ -28,8 +28,15 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Image.asset(
+          'appbar.png',
+          height: 45,
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
       ),
       body: Column(
         children: [

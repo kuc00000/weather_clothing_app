@@ -53,7 +53,7 @@ class _LoginFormState extends State<LoginForm> {
         if (currentUser.user!=null){
           if(!mounted) return;
           Navigator.pop(context);
-          Navigator.pushNamed(context, '/closet');
+          Navigator.pushNamed(context, '/location');
         }
       }
     }
@@ -130,7 +130,7 @@ class _LoginFormState extends State<LoginForm> {
                       await storage.write(key: "login", value: email+' '+password);
                       if(!mounted) return;
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/closet');
+                      Navigator.pushNamed(context, '/location');
                     }
                   }
                   /* 로그인 에러메세지 번역 */

@@ -21,14 +21,12 @@ class _MyClosetPageState extends State<MyClosetPage> {
   List<int> manTop = List.generate(8, (i) => i);
   List<int> manBottom = List.generate(5, (i) => i);
 
-  List<int> womanTop = List.generate(13, (i) => i);
+  List<int> womanTop = List.generate(10, (i) => i);
   List<int> womanBottom = List.generate(9, (i) => i);
 
   var myOuter;
   var myTop;
   var myBottom;
-  // List<bool> myTop = List.generate(13, (i) => false);
-  // List<bool> myBottom = List.generate(9, (i) => false);
 
   int userSex = 0;
 
@@ -63,13 +61,9 @@ class _MyClosetPageState extends State<MyClosetPage> {
           height: 45,
         ),
         actions: [
-          /* 로그아웃 코드 */
+          /* 로그아웃 코드 -> 그냥 옷장 종료 */
           IconButton(onPressed: (){
-            context.read<Users>().readDB();
-            FirebaseAuth.instance.signOut();
-            storage.delete(key: 'login');
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/login');
           }, icon: Icon(Icons.clear,
             color: Colors.black54,size: 30,))
         ],
@@ -216,7 +210,7 @@ class _BTN2State extends State<BTN2> {
     '플리스','야구잠바','항공잠바','가죽자켓','환절기코트','조끼패딩',
     '무스탕','숏패딩','겨울코트','돕바','롱패딩'];
   List<String> tops=['민소매티','반소매티','긴소매티','셔츠','맨투맨','후드티셔츠','목폴라','니트'
-    ,'여름블라우스','봄가을블라우스','봄가을원피스','여름원피스','겨울원피스'];
+    ,'여름블라우스','봄가을블라우스'];
   List<String> bottoms=['숏팬츠','트레이닝팬츠','슬랙스','데님팬츠','코튼팬츠'
   ,'여름스커트','봄가을스커트','레깅스','겨울스커트'];
 
@@ -249,14 +243,12 @@ class _BTN2State extends State<BTN2> {
       child: GestureDetector(
         onTap: (){
           setState(() {
+            checked?checked=false:checked=true;
             curColor == AppColor.mainColor?
               curColor = Colors.white
               :curColor = AppColor.mainColor;
-            curColor == AppColor.mainColor?
-              checked=true :checked=false;
-
-            context.read<Users>().addCloset(widget.pos, widget.imageName, checked);
           });
+          context.read<Users>().addCloset(widget.pos, widget.imageName, checked);
         },
         child: Stack(
           alignment: AlignmentDirectional.center,

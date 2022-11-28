@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Users with ChangeNotifier{
   int userSex=0;
   dynamic myOuter = List.generate(16, (i) => true);
-  dynamic myTop = List.generate(13, (i) => false);
+  dynamic myTop = List.generate(10, (i) => false);
   dynamic myBottom = List.generate(9, (i) => false);
 
   readDB () async {

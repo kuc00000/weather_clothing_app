@@ -363,7 +363,7 @@ class _MainPageState extends State<MainPage> {
           setState(() {
             currentPageIndex = index;
             if (index == 0) {
-              Navigator.pushNamed(context, '/main');
+              Navigator.pushNamed(context, '/main',arguments: {'temp':args['temp'],'feels_like':args['feels_like'],'pm10':args['pm10'],'pm2_5':args['pm2_5'],'pop':args['pop']});
             } else if (index == 1) {
               Navigator.pushNamed(context, '/calendar');
             } else {
