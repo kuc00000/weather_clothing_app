@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDQ6SVdDDeb1kFYZtk0cy-vZqnWLyu-1gk',
-    appId: '1:344408117120:android:21b9d89f154ddf1fbbbb65',
+    appId: '1:344408117120:android:31dd4e45c76e94a7bbbb65',
     messagingSenderId: '344408117120',
     projectId: 'weather-clothing-app',
     storageBucket: 'weather-clothing-app.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC_kDlYdWyOWU3SQ_iySf6vCMJ9qCnhSx0',
-    appId: '1:344408117120:ios:8748b9314b7d6693bbbb65',
+    appId: '1:344408117120:ios:dd3ab29acdcf0738bbbb65',
     messagingSenderId: '344408117120',
     projectId: 'weather-clothing-app',
     storageBucket: 'weather-clothing-app.appspot.com',
-    iosClientId: '344408117120-esmvp37f5u50hv9fdtgspjmcpbh3lgs0.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mobileAppProject',
+    iosClientId: '344408117120-84ias92ihbrcvp6asrcge73t3ketkqt1.apps.googleusercontent.com',
+    iosBundleId: 'com.example.weatherApp2',
   );
 }

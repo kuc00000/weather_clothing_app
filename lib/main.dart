@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app2/Weather_Location.dart';
 import 'firebase_options.dart';
 
 // 페이지
@@ -50,37 +51,41 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context)=>Users(),
-      builder:(context,child)=> GestureDetector(
-        onTap: (){
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: MaterialApp(
-          title: 'Weather clothing app',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: buildMaterialColor(const Color(0xff78E2DF)),
-          ),
-          initialRoute: '/',
-          routes: {
-            // 로딩화면은 splash 이용해 구현 -> 이미지 파일만 있으면 됨
-            // 로딩화면 -> 동네 설정 화면 바로 나오면 안 되고, 로그인화면 먼저 나와야 할 듯
-            // 최초 로그인일 경우에만 동네 설정 화면 띄우기
-            // 이 기능이 어렵다면, 동네 설정 화면은 제거하고 홈화면에서 gps 버튼 눌러 설정할 수 있도록 함
-            '/': (context) => const LoginPage(),
-            '/location': (context) => const MyHomePage(title: 'Location',),
-            '/add': (context) => const AddPage(title: 'Add Cloth',),
-            '/select': (context) => const SelectPage(title: 'Select Closet',),
-            '/closet': (context) => const MyClosetPage(),
-            '/main': (context) => const MainPage(title: 'Main',),
-            '/calendar': (context) => const CalendarPage(title: 'Calendar',),
-            '/settings': (context) => const SettingsPage(title: 'Settings',),
-            '/login': (context) => const LoginPage(),
-            '/signup': (context) => const SignupPage(),
+    return MultiProvider(
+      providers: [
+
+        ChangeNotifierProvider(create: (_) => Users()),
+        ChangeNotifierProvider(create: (_) => Weather_Location()),
+      ],
+      child: GestureDetector(
+          onTap: (){
+            FocusManager.instance.primaryFocus?.unfocus();
           },
+          child: MaterialApp(
+            title: 'Weather clothing app',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: buildMaterialColor(const Color(0xff78E2DF)),
+            ),
+            initialRoute: '/',
+            routes: {
+              // 로딩화면은 splash 이용해 구현 -> 이미지 파일만 있으면 됨
+              // 로딩화면 -> 동네 설정 화면 바로 나오면 안 되고, 로그인화면 먼저 나와야 할 듯
+              // 최초 로그인일 경우에만 동네 설정 화면 띄우기
+              // 이 기능이 어렵다면, 동네 설정 화면은 제거하고 홈화면에서 gps 버튼 눌러 설정할 수 있도록 함
+              '/': (context) => const LoginPage(),
+              '/location': (context) => const MyHomePage(title: 'Location',),
+              '/add': (context) => const AddPage(title: 'Add Cloth',),
+              '/select': (context) => const SelectPage(title: 'Select Closet',),
+              '/closet': (context) => const MyClosetPage(),
+              '/main': (context) => const MainPage(title: 'Main',),
+              '/calendar': (context) => const CalendarPage(title: 'Calendar',),
+              '/settings': (context) => const SettingsPage(title: 'Settings',),
+              '/login': (context) => const LoginPage(),
+              '/signup': (context) => const SignupPage(),
+            },
+          ),
         ),
-      ),
-    );
+      );
   }
 }

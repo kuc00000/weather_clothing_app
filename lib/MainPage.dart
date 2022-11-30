@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'Weather_Location.dart';
+import 'dart:convert';
+
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.title});
@@ -9,22 +14,108 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
+
+
 class _MainPageState extends State<MainPage> {
 
 
   String pass = '';
-  String locationDropdownValue = '암사동';
+
   int currentPageIndex = 0;
 
+
   @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> getWeeklyWeather(String city) async {
+    var str =
+        Uri.parse(
+            'http://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric&cnt=1');
+
+    var response = await http.get(str);
+    if (response.statusCode == 200) {
+
+      //var dataJson = jsonDecode(data); // string to json
+      var data = response.body;
+
+      var dataJson = jsonDecode(data);
+      print(data);
+      print(dataJson['list'][0]['main']['temp']);
+      temp = dataJson['list'][0]['main']['temp'];
+      feels_like = dataJson['list'][0]['main']['feels_like'];
+      if(dataJson['list'][0]['pop']==0){
+        pop = 0.0;
+      }else{
+        pop = dataJson['list'][0]['pop'];
+      }
+
+      description = dataJson['list'][0]['weather'][0]['description'];
+      print(description);
+    } else {
+      print('response status code = ${response.statusCode}');
+    }
+
+
+  }
 
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map;
-    final pop = args['pop'];
-    final pm10 = args['pm10'];
-    final pm2_5 = args['pm2_5'];
-    final temp = args['temp'];
-    final feels_like = args['feels_like'];
+    final pm10 = context.watch<Weather_Location>().pm10_status;
+    final pm2_5 = context.watch<Weather_Location>().pm2_5_status;
+    final temp = context.watch<Weather_Location>().temp;
+    final feels_like = context.watch<Weather_Location>().feels_like;
+    final pop = context.watch<Weather_Location>().pop;
+    final description = context.watch<Weather_Location>().description;
+    final city = context.watch<Weather_Location>().city_name;
+    String locationDropdownValue = city!;
+    String image = '10d@2x.png';
+    String weather_status = '맑음';
+
+    getWeeklyWeather(city);
+
+
+
+    switch(description){
+      case 'clear sky':
+        image = '01d@2x.png';
+        weather_status = '맑음';
+        break;
+      case 'few clouds':
+        image = '02d@2x.png';
+        weather_status = '구름 조금';
+        break;
+      case 'scattered clouds':
+        image = '03d@2x.png';
+        weather_status = '적란운';
+        break;
+      case 'broken clouds':
+        image = '04d@2x.png';
+        weather_status = '구름 많음';
+        break;
+      case 'shower rain':
+        image = '09d@2x.png';
+        weather_status = '소나기';
+        break;
+      case 'rain':
+        image = '10d@2x.png';
+        weather_status = '비';
+        break;
+      case 'thunderstorm':
+        image = '11d@2x.png';
+        weather_status = '천둥번개를 동반한 비';
+        break;
+      case 'snow':
+        image = '13d@2x.png';
+        weather_status = '눈';
+        break;
+      case 'mist':
+        image = '50d@2x.png';
+        weather_status = '안개';
+        break;
+
+    }
+
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +149,7 @@ class _MainPageState extends State<MainPage> {
                               locationDropdownValue = newValue!;
                             });
                           },
-                          items: <String>['암사동','상도동','동네추가'].map<DropdownMenuItem<String>>((String value) {
+                          items: <String>[city!,'동네추가'].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
@@ -82,7 +173,8 @@ class _MainPageState extends State<MainPage> {
                     Container(
                       width: 25,
                       height: 25,
-                      child: Center(child: Text('우'),),
+                      child: Center(child: Image.network(
+                          'http://openweathermap.org/img/wn/$image')),
                       decoration: BoxDecoration(
                         color: const Color(0xffCFE7EE),
                         borderRadius: BorderRadius.circular(5),
@@ -92,7 +184,7 @@ class _MainPageState extends State<MainPage> {
                       width: 5,
                     ),
                      Text(
-                      '강수확률 $pop%',
+                       '강수확률 ${pop!*100}%',
                       style: TextStyle(
                         fontSize: 14,
                       ),
@@ -103,7 +195,9 @@ class _MainPageState extends State<MainPage> {
                     Container(
                       width: 25,
                       height: 25,
-                      child: Center(child: Text('마'),),
+                      child:  Image.asset(
+                        'mask.png',
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xffC0D1FD),
                         borderRadius: BorderRadius.circular(5),
@@ -127,16 +221,16 @@ class _MainPageState extends State<MainPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text('날씨 그림'),
+                  Image.network('http://openweathermap.org/img/wn/$image'),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '$temp℃',
+                        '${temp!.toStringAsFixed(1)}℃',
                         style: TextStyle(fontSize: 40,),
                       ),
                       Text(
-                        '체감온도 $feels_like ℃',
+                        '체감온도 ${feels_like!.toStringAsFixed(1)} ℃',
                         style: TextStyle(fontSize: 14,),
                       ),
                       const SizedBox(
@@ -363,7 +457,7 @@ class _MainPageState extends State<MainPage> {
           setState(() {
             currentPageIndex = index;
             if (index == 0) {
-              Navigator.pushNamed(context, '/main',arguments: {'temp':args['temp'],'feels_like':args['feels_like'],'pm10':args['pm10'],'pm2_5':args['pm2_5'],'pop':args['pop']});
+              Navigator.pushNamed(context, '/main');
             } else if (index == 1) {
               Navigator.pushNamed(context, '/calendar');
             } else {
