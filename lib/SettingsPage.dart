@@ -86,7 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
             endIndent: 10,
           ),
           SizedBox(
-            height: 50,
+            height: 55,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -128,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
             endIndent: 10,
           ),
           SizedBox(
-            height: 50,
+            height: 55,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -164,7 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
             endIndent: 10,
           ),
           SizedBox(
-            height: 50,
+            height: 55,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -206,7 +206,7 @@ class _SettingsPageState extends State<SettingsPage> {
             endIndent: 10,
           ),
           SizedBox(
-            height: 50,
+            height: 55,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -307,7 +307,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             child: Container(
               color: Colors.white,
-              height: 50,
+              height: 55,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -343,7 +343,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             child: Container(
               color: Colors.white,
-              height: 50,
+              height: 55,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

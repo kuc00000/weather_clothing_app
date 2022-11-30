@@ -29,6 +29,7 @@ class _MyClosetPageState extends State<MyClosetPage> {
   var myBottom;
 
   int userSex = 0;
+  String? isFirst='';
 
   /* 성별가져오기 */
   static final storage = FlutterSecureStorage();
@@ -49,6 +50,20 @@ class _MyClosetPageState extends State<MyClosetPage> {
     myTop = userInfo.data()!['top'];
     myBottom = userInfo.data()!['bottom'];
     // print(context.watch<Users>().userSex);
+    isFirst = (await storage.read(key: "isFirstVisit"));
+    if(isFirst=='true'){
+      showDialog(context: context,
+          builder: (context) => SimpleDialog(
+        title: const Center(child: Text('안내문')),
+        contentPadding: const EdgeInsets.all(10),
+        children: [
+          Center(child: Text('가지고 있는 옷을 선택해주세요.')),
+          TextButton(
+              onPressed: (){ Navigator.pop(context);},
+              child: const Text('확인'))
+        ],
+      ));
+    }
   }
 
   @override
@@ -172,8 +187,32 @@ class _MyClosetPageState extends State<MyClosetPage> {
                         context.read<Users>().setCloset('outer', myOuter);
                         context.read<Users>().setCloset('top', myTop);
                         context.read<Users>().setCloset('bottom', myBottom);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content:Text('저장되었습니다.',textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),));
+                        isFirst = (await storage.read(key: "isFirstVisit"))!;
+                        if(isFirst=='true'){
+                          showDialog(context: context,
+                              builder: (context) => SimpleDialog(
+                                title: const Center(child: Text('안내문')),
+                                contentPadding: const EdgeInsets.all(10),
+                                children: [
+                                  Center(child: Text('저장되었습니다.')),
+                                  TextButton(
+                                      onPressed: (){
+                                        Navigator.popUntil(context, (route) => route.isFirst);
+                                        Navigator.pop(context);
+                                        Navigator.pushNamed(context, '/main');
+                                        },
+                                      child: const Text('확인'))
+                                ],
+                              ));
+                          await storage.write(key: "isFirstVisit", value: 'false');
+                        }else{
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content:Text('저장되었습니다.',textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),));
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/main');
+                        }
+
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15,bottom: 15,right: 15,left: 15),

@@ -33,6 +33,7 @@ class _LoginFormState extends State<LoginForm> {
   //
   String? UserInfo='';
   String? autoCheck='';
+  String? isFirst='';
 
   /* 자동 로그인 코드 */
   static final storage = FlutterSecureStorage();
@@ -45,14 +46,22 @@ class _LoginFormState extends State<LoginForm> {
   }
   _asyncMethod() async {
     autoCheck = (await storage.read(key: "autologin"));
+    /* 자동로그인 */
     if (autoCheck=='true'){
       UserInfo = (await storage.read(key: "login"));
+      /* 내장메모리에 저장된 로그인 이력이 있는경우 */
       if (UserInfo != null){
         final currentUser = await _authentication.signInWithEmailAndPassword(
             email: UserInfo!.split(' ')[0], password: UserInfo!.split(' ')[1]);
         if (currentUser.user!=null){
           if(!mounted) return;
+          isFirst = (await storage.read(key: "isFirstVisit"));
           Navigator.pop(context);
+          // if(isFirst=='true'){
+          //   Navigator.pushNamed(context, '/location');
+          // }else{
+          //   Navigator.pushNamed(context, '/main');
+          // }
           Navigator.pushNamed(context, '/location');
         }
       }
@@ -129,7 +138,14 @@ class _LoginFormState extends State<LoginForm> {
                       _formKey.currentState!.reset();
                       await storage.write(key: "login", value: email+' '+password);
                       if(!mounted) return;
+
+                      isFirst = (await storage.read(key: "isFirstVisit"));
                       Navigator.pop(context);
+                      // if(isFirst=='true'){
+                      //   Navigator.pushNamed(context, '/location');
+                      // }else{
+                      //   Navigator.pushNamed(context, '/main');
+                      // }
                       Navigator.pushNamed(context, '/location');
                     }
                   }

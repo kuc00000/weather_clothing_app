@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app2/Weather_Location.dart';
+import 'Weather_Location.dart';
 import 'firebase_options.dart';
 
 // 페이지
-import 'MyHomePage.dart';
-import 'AddPage.dart';
-import 'SelectPage.dart';
+import 'SelectPositionPage.dart';
 import 'MyClosetPage.dart';
 import 'MainPage.dart';
 import 'CalendarPage.dart';
@@ -74,11 +72,9 @@ class MyApp extends StatelessWidget {
               // 최초 로그인일 경우에만 동네 설정 화면 띄우기
               // 이 기능이 어렵다면, 동네 설정 화면은 제거하고 홈화면에서 gps 버튼 눌러 설정할 수 있도록 함
               '/': (context) => const LoginPage(),
-              '/location': (context) => const MyHomePage(title: 'Location',),
-              '/add': (context) => const AddPage(title: 'Add Cloth',),
-              '/select': (context) => const SelectPage(title: 'Select Closet',),
+              '/location': (context) => const SelectPositionPage(title: 'Location',),
               '/closet': (context) => const MyClosetPage(),
-              '/main': (context) => const MainPage(title: 'Main',),
+              '/main': (context) => const MainPage(),
               '/calendar': (context) => const CalendarPage(title: 'Calendar',),
               '/settings': (context) => const SettingsPage(title: 'Settings',),
               '/login': (context) => const LoginPage(),

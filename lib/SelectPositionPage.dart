@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -8,18 +9,18 @@ import 'LocationAPI.dart';
 import 'Weather_Location.dart';
 
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class SelectPositionPage extends StatefulWidget {
+  const SelectPositionPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<SelectPositionPage> createState() => _SelectPositionPageState();
 }
 
 
 
-class _MyHomePageState extends State<MyHomePage> {
+class _SelectPositionPageState extends State<SelectPositionPage> {
   int pass = 0;
   final _openweatherkey = '3cdec813571d0497b65e5a20577293b7';
 
@@ -305,8 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 context.read<Weather_Location>().setPop(pop);
                 context.read<Weather_Location>().setLat(lat);
                 context.read<Weather_Location>().setLon(lon);
-
-                Navigator.pushNamed(context, '/add');
+                Navigator.pushNamed(context, '/closet');
               }, child: const Text('Next')),
             ],
           ),
