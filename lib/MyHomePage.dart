@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int pass = 0;
-  final _openweatherkey = '3cdec813571d0497b65e5a20577293b7';
+  final _openweatherkey = FlutterConfig.get('apiKey');//'3cdec813571d0497b65e5a20577293b7';
 
   String dropdownValue = province.first;
   String dropdownValue2 = cityList.first;

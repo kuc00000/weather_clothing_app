@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'MainPage.dart';
 class SelectPage extends StatefulWidget {
   const SelectPage({super.key, required this.title});
 
@@ -118,7 +120,11 @@ class _SelectPageState extends State<SelectPage> {
             ),
             ElevatedButton(onPressed: () {
               setState(() {
-                Navigator.pushNamed(context, '/main');
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context){
+                  return MainPage(title: "Main");
+                }), (r){
+                  return false;
+                });
               });
             }, style: ElevatedButton.styleFrom(
                 minimumSize: const Size(385,40),

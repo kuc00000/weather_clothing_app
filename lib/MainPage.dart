@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'Weather_Location.dart';
@@ -22,17 +23,21 @@ class _MainPageState extends State<MainPage> {
   String pass = '';
 
   int currentPageIndex = 0;
-
+  double? lat;
+  double? lon;
 
   @override
   void initState() {
     super.initState();
+
   }
 
-  Future<void> getWeeklyWeather(String city) async {
-    /*var str =
+  Future<void> getWeeklyWeather(double? lat, double? lon) async {
+
+    final _openweatherkey = FlutterConfig.get('apiKey');
+    var str =
         Uri.parse(
-            'http://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric&cnt=1');
+            'http://api.openweathermap.org/data/2.5/forecast/?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric');
 
     var response = await http.get(str);
     if (response.statusCode == 200) {
@@ -41,22 +46,16 @@ class _MainPageState extends State<MainPage> {
       var data = response.body;
 
       var dataJson = jsonDecode(data);
-      print(data);
-      print(dataJson['list'][0]['main']['temp']);
-      temp = dataJson['list'][0]['main']['temp'];
-      feels_like = dataJson['list'][0]['main']['feels_like'];
-      if(dataJson['list'][0]['pop']==0){
-        pop = 0.0;
-      }else{
-        pop = dataJson['list'][0]['pop'];
-      }
 
-      description = dataJson['list'][0]['weather'][0]['description'];
-      print(description);
+
+
+
+      var description = dataJson['list'][0]['weather'][0]['description'];
+
     } else {
       print('response status code = ${response.statusCode}');
     }
-*/
+
 
   }
 
@@ -77,11 +76,17 @@ class _MainPageState extends State<MainPage> {
     final pop = context.watch<Weather_Location>().pop;
     final description = context.watch<Weather_Location>().description;
     final city = context.watch<Weather_Location>().city_name;
+    final lat = context.watch<Weather_Location>().lat;
+    final lon = context.watch<Weather_Location>().lon;
+
     String locationDropdownValue = city!;
     String image = '10d@2x.png';
     String weather_status = '맑음';
 
-    getWeeklyWeather(city);
+
+
+
+    getWeeklyWeather(lat,lon);
 
 
 
@@ -182,8 +187,8 @@ class _MainPageState extends State<MainPage> {
                     Container(
                       width: 25,
                       height: 25,
-                      child: Center(child: Image.network(
-                          'http://openweathermap.org/img/wn/$image')),
+                      child: Center(child: Icon(Icons.umbrella_outlined,
+                      color:Colors.black)),
                       decoration: BoxDecoration(
                         color: const Color(0xffCFE7EE),
                         borderRadius: BorderRadius.circular(5),
@@ -204,9 +209,8 @@ class _MainPageState extends State<MainPage> {
                     Container(
                       width: 25,
                       height: 25,
-                      child:  Image.asset(
-                        'mask.png',
-                      ),
+                      child: Icon(Icons.masks,
+                      color:Colors.white),
                       decoration: BoxDecoration(
                         color: const Color(0xffC0D1FD),
                         borderRadius: BorderRadius.circular(5),
@@ -249,7 +253,7 @@ class _MainPageState extends State<MainPage> {
                         '${getWeatherText(temp, feels_like)}',
                         style: TextStyle(fontSize: 14,),
                       ),
-                     
+
                     ],
                   ),
                 ],
@@ -489,4 +493,53 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
+}
+
+
+class WeatherListElement extends StatelessWidget {
+  const WeatherListElement({Key? key, this.dayOfWeek, this.weather,this.min_temp,this.max_temp})
+      : super(key: key);
+  final String? dayOfWeek;
+  final String? weather;
+  final double? min_temp;
+  final double? max_temp;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+         Text(
+          '$dayOfWeek!',
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        const Text(
+          '날씨그림',
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+             Text(
+              '${min_temp!}~${max_temp!}℃',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+            const Text(
+              '반팔 티셔츠, 가디건',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
 }
