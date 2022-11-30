@@ -30,7 +30,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> getWeeklyWeather(String city) async {
-    var str =
+    /*var str =
         Uri.parse(
             'http://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric&cnt=1');
 
@@ -56,8 +56,17 @@ class _MainPageState extends State<MainPage> {
     } else {
       print('response status code = ${response.statusCode}');
     }
+*/
 
+  }
 
+  String getWeatherText(double? temp, double? feels_like){
+    var text='좋은 하루 되세요!';
+    if(temp!-feels_like!>=5.0&&temp<=5.0){
+      text = '날씨가 많이 춥네요. 옷은 따뜻하게 입으시고 \n'+
+          '감기 조심하세요!';
+    }
+    return text;
   }
 
   Widget build(BuildContext context) {
@@ -237,13 +246,10 @@ class _MainPageState extends State<MainPage> {
                         height: 10,
                       ),
                       Text(
-                        '맨투맨 입기에는 덥지만',
+                        '${getWeatherText(temp, feels_like)}',
                         style: TextStyle(fontSize: 14,),
                       ),
-                      Text(
-                        '반팔, 가디건은 괜찮은 날씨',
-                        style: TextStyle(fontSize: 14,),
-                      ),
+                     
                     ],
                   ),
                 ],

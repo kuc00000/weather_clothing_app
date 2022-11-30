@@ -6,6 +6,7 @@ class Weather_Location with ChangeNotifier{
   String? pm10_status;
   String? pm2_5_status;
   double? pop;
+  double? wind_speed;
 
   String? province;
   String? city_name;
@@ -13,6 +14,10 @@ class Weather_Location with ChangeNotifier{
 
   double? lat;
   double? lon;
+
+  setwindSpeed(double? wind_speed){
+    this.wind_speed = wind_speed;
+  }
 
   setLat(double? lat){
     this.lat = lat;
