@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'mainColor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,7 +34,6 @@ class _LoginFormState extends State<LoginForm> {
   //
   String? UserInfo='';
   String? autoCheck='';
-  String? isFirst='';
 
   /* 자동 로그인 코드 */
   static final storage = FlutterSecureStorage();
@@ -54,15 +54,17 @@ class _LoginFormState extends State<LoginForm> {
         final currentUser = await _authentication.signInWithEmailAndPassword(
             email: UserInfo!.split(' ')[0], password: UserInfo!.split(' ')[1]);
         if (currentUser.user!=null){
+          final userInfo = await FirebaseFirestore.instance.collection('user')
+              .doc(FirebaseAuth.instance.currentUser!.uid).get();
           if(!mounted) return;
-          isFirst = (await storage.read(key: "isFirstVisit"));
-          Navigator.pop(context);
-          // if(isFirst=='true'){
-          //   Navigator.pushNamed(context, '/location');
-          // }else{
+          // if (userInfo.data()!['isFirstVisit']==true){
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/location');
+          // }
+          // else{
+          //   Navigator.pop(context);
           //   Navigator.pushNamed(context, '/main');
           // }
-          Navigator.pushNamed(context, '/location');
         }
       }
     }
@@ -139,14 +141,17 @@ class _LoginFormState extends State<LoginForm> {
                       await storage.write(key: "login", value: email+' '+password);
                       if(!mounted) return;
 
-                      isFirst = (await storage.read(key: "isFirstVisit"));
-                      Navigator.pop(context);
-                      // if(isFirst=='true'){
-                      //   Navigator.pushNamed(context, '/location');
-                      // }else{
+                      final userInfo = await FirebaseFirestore.instance.collection('user')
+                          .doc(FirebaseAuth.instance.currentUser!.uid).get();
+                      if(!mounted) return;
+                      // if (userInfo.data()!['isFirstVisit']==true){
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/location');
+                      // }
+                      // else{
+                      //   Navigator.pop(context);
                       //   Navigator.pushNamed(context, '/main');
                       // }
-                      Navigator.pushNamed(context, '/location');
                     }
                   }
                   /* 로그인 에러메세지 번역 */
@@ -230,7 +235,7 @@ class _LoginFormState extends State<LoginForm> {
                         email='';
                         password='';
                       }
-                      await storage.write(key: "autologin", value: devLogin.toString());
+                      // await storage.write(key: "autologin", value: devLogin.toString());
                     }),
               ],
             ),

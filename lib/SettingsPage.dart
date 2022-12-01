@@ -37,8 +37,8 @@ class _SettingsPageState extends State<SettingsPage> {
   _asyncMethod() async {
     final myInfo = await FirebaseFirestore.instance.collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid).get();
-    setState(()async{
-      UserInfo = (await storage.read(key: "login"));
+    UserInfo = (await storage.read(key: "login"));
+    setState((){
       UserId = UserInfo!.split('@')[0];
       _currentRangeValues = RangeValues(myInfo.data()!['userConstitution'][0].toDouble(), myInfo.data()!['userConstitution'][1].toDouble());
     });

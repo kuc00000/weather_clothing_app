@@ -167,7 +167,8 @@ class _SignupFormState extends State<SignupForm> {
                       'outer':myOuter,
                       'top':myTop,
                       'bottom':myBottom,
-                      'userConstitution':[30,35]
+                      'userConstitution':[30,35],
+                      'isFirstVisit':true
                     });
                     if (newUser.user !=null){
                       _formKey.currentState!.reset();
@@ -198,7 +199,6 @@ class _SignupFormState extends State<SignupForm> {
                 }
                 /* 에러없이 정상적으로 회원가입이 된 경우 */
                 else{
-                  await storage.write(key: "isFirstVisit", value: 'true');
                   showDialog(context: context,
                       builder: (context) => SimpleDialog(
                         title: const Center(child: Text('안내문')),
