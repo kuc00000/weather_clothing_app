@@ -467,10 +467,13 @@ class _MainPageState extends State<MainPage> {
           setState(() {
             currentPageIndex = index;
             if (index == 0) {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/main');
             } else if (index == 1) {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/calendar');
             } else {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/settings');
             }
           });

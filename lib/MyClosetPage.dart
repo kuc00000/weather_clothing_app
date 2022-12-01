@@ -184,6 +184,7 @@ class _MyClosetPageState extends State<MyClosetPage> {
                         'top':context.read<Users>().myTop,
                         'bottom':context.read<Users>().myBottom
                       });
+                        if(!mounted) return;
                         context.read<Users>().setCloset('outer', myOuter);
                         context.read<Users>().setCloset('top', myTop);
                         context.read<Users>().setCloset('bottom', myBottom);
@@ -206,6 +207,7 @@ class _MyClosetPageState extends State<MyClosetPage> {
                               ));
                           await storage.write(key: "isFirstVisit", value: 'false');
                         }else{
+                          if(!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content:Text('저장되었습니다.',textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),));
                           Navigator.popUntil(context, (route) => route.isFirst);

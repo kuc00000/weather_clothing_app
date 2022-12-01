@@ -7,6 +7,7 @@ import 'dart:convert';
 
 import 'LocationAPI.dart';
 import 'Weather_Location.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 
 class SelectPositionPage extends StatefulWidget {
@@ -36,6 +37,8 @@ class _SelectPositionPageState extends State<SelectPositionPage> {
   String? description;
   double? lat;
   double? lon;
+
+  bool showSpinner=false;
 
   @override
   void initState() {
@@ -211,104 +214,123 @@ class _SelectPositionPageState extends State<SelectPositionPage> {
             height: 45,
           ),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                '우리 동네를 검색해 찾아보세요',
-                style: TextStyle(
-                  fontSize: 20,
+        body: ModalProgressHUD(
+          inAsyncCall: showSpinner,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  '우리 동네를 검색해 찾아보세요',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.arrow_downward),
-                elevation: 16,
-                style: const TextStyle(color: Colors.deepPurple),
-                underline: Container(
-                  height: 2,
-                  color: Colors.deepPurpleAccent,
+                const SizedBox(
+                  height: 20,
                 ),
-                onChanged: (String? value) {
-                  // This is called when the user selects an item.
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String? value) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      dropdownValue = value!;
+
+                      cityList = ['지역을 선택해주세요.'];
+                      dropdownValue2= cityList.first;
+                    });
+                    setState(() {
+                      showSpinner=true;
+                    });
+                    getPosition(value!);
+                    setState(() {
+                      showSpinner=false;
+                    });
+                  },
+                  items: province.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                DropdownButton<String>(
+                  value: dropdownValue2,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String? value) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      dropdownValue2 = value!;
+                    });
+                    setState(() {
+                      showSpinner=true;
+                    });
+                    getWeatherDataByName(province:dropdownValue!,
+                        city_name:value!);
+                    setState(() {
+                      showSpinner=false;
+                    });
+                  },
+                  items: cityList.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                const Text(
+                  '국내 도/시를 선택해주세요 ex) 경기도 광주시',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                const Text(
+                  '동네의 날씨와 추천 옷차림을 볼 수 있어요',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(onPressed: () {
                   setState(() {
-                    dropdownValue = value!;
-
-                    cityList = ['지역을 선택해주세요.'];
-                    dropdownValue2= cityList.first;
+                    showSpinner=true;
                   });
-
-                  getPosition(value!);
-                },
-                items: province.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-
-              DropdownButton<String>(
-                value: dropdownValue2,
-                icon: const Icon(Icons.arrow_downward),
-                elevation: 16,
-                style: const TextStyle(color: Colors.deepPurple),
-                underline: Container(
-                  height: 2,
-                  color: Colors.deepPurpleAccent,
-                ),
-                onChanged: (String? value) {
-                  // This is called when the user selects an item.
+                  context.read<Weather_Location>().setProvince(dropdownValue);
+                  context.read<Weather_Location>().setCity(dropdownValue2);
+                  context.read<Weather_Location>().setTemp(temp);
+                  context.read<Weather_Location>().setFeels_like(feels_like);
+                  context.read<Weather_Location>().setPm10(pm10_status);
+                  context.read<Weather_Location>().setpm2_5(pm2_5_status);
+                  context.read<Weather_Location>().setDescription(description);
+                  context.read<Weather_Location>().setPop(pop);
+                  context.read<Weather_Location>().setLat(lat);
+                  context.read<Weather_Location>().setLon(lon);
                   setState(() {
-                    dropdownValue2 = value!;
+                    showSpinner=false;
                   });
-
-                  getWeatherDataByName(province:dropdownValue!,
-                      city_name:value!);
-                },
-                items: cityList.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              const Text(
-                '국내 도/시를 선택해주세요 ex) 경기도 광주시',
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-              const Text(
-                '동네의 날씨와 추천 옷차림을 볼 수 있어요',
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(onPressed: () {
-                context.read<Weather_Location>().setProvince(dropdownValue);
-                context.read<Weather_Location>().setCity(dropdownValue2);
-                context.read<Weather_Location>().setTemp(temp);
-                context.read<Weather_Location>().setFeels_like(feels_like);
-                context.read<Weather_Location>().setPm10(pm10_status);
-                context.read<Weather_Location>().setpm2_5(pm2_5_status);
-                context.read<Weather_Location>().setDescription(description);
-                context.read<Weather_Location>().setPop(pop);
-                context.read<Weather_Location>().setLat(lat);
-                context.read<Weather_Location>().setLon(lon);
-                Navigator.pushNamed(context, '/closet');
-              }, child: const Text('Next')),
-            ],
+                  Navigator.pushNamed(context, '/closet');
+                }, child: const Text('Next')),
+              ],
+            ),
           ),
         ),
       );

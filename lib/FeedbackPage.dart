@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'Weather_Location.dart';
 
 class feedbackPage extends StatefulWidget {
   const feedbackPage({Key? key}) : super(key: key);
@@ -139,6 +142,7 @@ class _feedbackPageState extends State<feedbackPage> {
                 int outerIndex = clothesName[0].indexOf(outerDropdownValue)-1;
                 int topIndex = clothesName[1].indexOf(topDropdownValue);
                 int bottomIndex = clothesName[2].indexOf(bottomDropdownValue);
+                String temperature = context.read<Weather_Location>().temp.toString();
                 await FirebaseFirestore.instance
                     .collection(_authentication.currentUser!.uid)
                     .doc(DateTime.fromMicrosecondsSinceEpoch(Timestamp.now().microsecondsSinceEpoch+32400000000).toString().split(' ')[0])
@@ -147,6 +151,7 @@ class _feedbackPageState extends State<feedbackPage> {
                   'top':topIndex,
                   'bottom':bottomIndex,
                   'feedback':_sliderValue,
+                  'temperature':temperature
                 });
                 Navigator.pop(context);
               }, child: const Text('피드백 적용'))

@@ -136,10 +136,13 @@ class _CalendarPageState extends State<CalendarPage> {
           setState(() {
             currentPageIndex = index;
             if (index == 0) {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/main');
             } else if (index == 1) {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/calendar');
             } else {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/settings');
             }
           });

@@ -166,7 +166,8 @@ class _SignupFormState extends State<SignupForm> {
                       'userSex' : _sex,
                       'outer':myOuter,
                       'top':myTop,
-                      'bottom':myBottom
+                      'bottom':myBottom,
+                      'userConstitution':[30,35]
                     });
                     if (newUser.user !=null){
                       _formKey.currentState!.reset();
