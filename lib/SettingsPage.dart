@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'TimeSetting.dart';
 import 'UserInfomation.dart';
+import 'FeedbackPage.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key, required this.title});
@@ -163,39 +164,30 @@ class _SettingsPageState extends State<SettingsPage> {
             indent: 10,
             endIndent: 10,
           ),
-          SizedBox(
-            height: 55,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '   여성복 추천',
-                  style: TextStyle(
-                    fontSize: 18,
+          GestureDetector(
+            onTap: (){
+              showDialog(context: context, builder: (BuildContext context){
+                return feedbackPage();
+              });
+            },
+            child: Container(
+              color: Colors.white,
+              height: 55,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '   오늘의 피드백',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
-                ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Transform.scale(
-                      scale: 0.80,
-                      child: CupertinoSwitch(
-                        value: _switch2,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _switch2 = value;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                  ],
-                ),
-              ],
+                  Padding(
+                    padding: EdgeInsets.only(right: 15),
+                    child: Icon(Icons.chevron_right),
+                  ),
+                ],
+              ),
             ),
           ),
           const Divider(
