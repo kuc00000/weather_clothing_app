@@ -11,8 +11,21 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        actions: [
+          /* 로그아웃 코드 -> 그냥 옷장 종료 */
+          IconButton(onPressed: (){
+            Navigator.pop(context);
+          }, icon: Icon(Icons.clear,
+            color: Colors.black54,size: 30,))
+        ],
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+      ),
       body: SignupForm(),
     );
   }
@@ -48,7 +61,7 @@ class _SignupFormState extends State<SignupForm> {
         key: _formKey,
         child: ListView(
           children: [
-            const SizedBox(height: 35,),
+            const SizedBox(height: 5,),
             Image.asset(
               'appbar.png',
               height: 60,
