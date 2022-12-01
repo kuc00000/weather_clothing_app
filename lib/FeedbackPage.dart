@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'OutfitRecommender.dart';
 import 'Weather_Location.dart';
 
 class feedbackPage extends StatefulWidget {
@@ -153,6 +154,11 @@ class _feedbackPageState extends State<feedbackPage> {
                   'feedback':_sliderValue,
                   'temperature':temperature
                 });
+                final myInfo = await FirebaseFirestore.instance.collection('user')
+                    .doc(FirebaseAuth.instance.currentUser!.uid).get();
+                final feedInfo = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser!.uid)
+                    .doc(DateTime.fromMicrosecondsSinceEpoch(Timestamp.now().microsecondsSinceEpoch+32400000000).toString().split(' ')[0]).get();
+                adjustConstitution(_sliderValue,[myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]],[outerIndex,topIndex,bottomIndex],feedInfo.data()!['temperature'].toInt());
                 Navigator.pop(context);
               }, child: const Text('피드백 적용'))
             ],

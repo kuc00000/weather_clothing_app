@@ -1,4 +1,7 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 final outers =[
   [12,17,0],//바람막이
   [13,20,1],//청자켓
@@ -205,11 +208,14 @@ double suitable( List<int> aim,{List<int>? x,List<int>? y,List<int>? z}){ //clot
   return 0; //not suitable
 }
 
-List<int> adjustConstitution(feedback,userConstitution,userOutfit,todayWeather) { //feedback : 0~4 int, userConstitution : [a,b] 알고리즘 수정필요******
+void adjustConstitution(feedback,userConstitution,userOutfit,todayWeather) async { //feedback : 0~4 int, userConstitution : [a,b] 알고리즘 수정필요******
   //feedback =>  [so cold, cold, normal, hot, so hot]
   int maxSize=7;
   if(feedback==2){
-    return userConstitution;
+    // return userConstitution;
+    await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).update({
+      'userConstitution': userConstitution
+    });
   }
   else {
     userOutfit[0]+=todayWeather;
@@ -230,7 +236,10 @@ List<int> adjustConstitution(feedback,userConstitution,userOutfit,todayWeather) 
       }
     }
   }
-  return userConstitution; //return type: [a,b]
+  await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).update({
+    'userConstitution': userConstitution
+  });
+  // return userConstitution; //return type: [a,b]
 }
 
 
