@@ -159,7 +159,9 @@ class _feedbackPageState extends State<feedbackPage> {
                 final feedInfo = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser!.uid)
                     .doc(DateTime.fromMicrosecondsSinceEpoch(Timestamp.now().microsecondsSinceEpoch+32400000000).toString().split(' ')[0]).get();
                 adjustConstitution(_sliderValue,[myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]],[outerIndex,topIndex,bottomIndex],feedInfo.data()!['temperature'].toInt());
+                Navigator.popUntil(context, (route) => route.isFirst);
                 Navigator.pop(context);
+                Navigator.pushNamed(context, '/settings');
               }, child: const Text('피드백 적용'))
             ],
           ),

@@ -68,11 +68,11 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               SizedBox(width: 10,),
               Padding(
-                padding: const EdgeInsets.only(right: 13),
+                padding: const EdgeInsets.only(right: 20),
                 child: Text(
                   '${UserId} 님',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 19,
                     color: Colors.grey,
                     fontWeight: FontWeight.w400,
                   ),
@@ -81,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           const SizedBox(
-            height: 15,
+            height: 10,
           ),
           const Divider(
             color: Colors.black,
@@ -129,13 +129,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    '   체질 정보',
+                    '   내 체질 정보',
                     style: TextStyle(
                       fontSize: 18,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.only(right: 20),
                     child: Column(
                       children: [
                         const SizedBox(
@@ -152,28 +152,28 @@ class _SettingsPageState extends State<SettingsPage> {
                             trackHeight: 11.0,
                             showValueIndicator: ShowValueIndicator.never,
                           ),
-                          child: RangeSlider(
-                            values: _currentRangeValues,
-                            min: 0,
-                            max: 40,
-                            divisions: 40,
-                            labels: RangeLabels(
-                              _currentRangeValues.start.round().toString(),
-                              _currentRangeValues.end.round().toString(),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width/2,
+                            child: RangeSlider(
+                              values: _currentRangeValues,
+                              min: 0,
+                              max: 40,
+                              divisions: 40,
+                              labels: RangeLabels(
+                                _currentRangeValues.start.round().toString(),
+                                _currentRangeValues.end.round().toString(),
+                              ),
+                              onChanged: (RangeValues values) {
+                                setState(() {
+                                //  _currentRangeValues = values;
+                                });
+                              },
                             ),
-                            onChanged: (RangeValues values) {
-                              setState(() {
-                              //  _currentRangeValues = values;
-                              });
-                            },
                           ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            SizedBox(
-                              width: 5,
-                            ),
+                          children: [
                             Text(
                               '추워요',
                               style: TextStyle(
@@ -181,7 +181,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                             ),
                             SizedBox(
-                              width: 45,
+                              width: MediaQuery.of(context).size.width/5-10,
                             ),
                             Text(
                               '보통',
@@ -190,16 +190,13 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                             ),
                             SizedBox(
-                              width: 45,
+                              width: MediaQuery.of(context).size.width/5-10,
                             ),
                             Text(
                               '더워요',
                               style: TextStyle(
                                 fontSize: 11,
                               ),
-                            ),
-                            SizedBox(
-                              width: 5,
                             ),
                           ],
                         ),
