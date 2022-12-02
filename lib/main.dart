@@ -13,6 +13,7 @@ import 'SettingsPage.dart';
 import 'LoginPage.dart';
 import 'SignupPage.dart';
 import 'UserInfomation.dart';
+import 'AddPage.dart';
 import 'mainColor.dart';
 
 void main() async {
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
               // 최초 로그인일 경우에만 동네 설정 화면 띄우기
               // 이 기능이 어렵다면, 동네 설정 화면은 제거하고 홈화면에서 gps 버튼 눌러 설정할 수 있도록 함
               '/': (context) => const LoginPage(),
+              '/add':(context) => const AddPage(),
               '/location': (context) => const SelectPositionPage(title: 'Location',),
               '/closet': (context) => const MyClosetPage(),
               '/main': (context) => const MainPage(),

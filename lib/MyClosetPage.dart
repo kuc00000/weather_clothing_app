@@ -48,20 +48,6 @@ class _MyClosetPageState extends State<MyClosetPage> {
     // print(myOuter);
     myTop = userInfo.data()!['top'];
     myBottom = userInfo.data()!['bottom'];
-
-    // if(isFirst=='true'){
-      showDialog(context: context,
-          builder: (context) => SimpleDialog(
-        title: const Center(child: Text('안내문')),
-        contentPadding: const EdgeInsets.all(10),
-        children: [
-          Center(child: Text('가지고 있는 옷을 선택해주세요.')),
-          TextButton(
-              onPressed: (){ Navigator.pop(context);},
-              child: const Text('확인'))
-        ],
-      ));
-    // }
   }
 
   @override

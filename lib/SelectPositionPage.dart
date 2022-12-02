@@ -327,7 +327,7 @@ class _SelectPositionPageState extends State<SelectPositionPage> {
                   setState(() {
                     showSpinner=false;
                   });
-                  Navigator.pushNamed(context, '/closet');
+                  Navigator.pushNamed(context, '/add');
                 }, child: const Text('Next')),
               ],
             ),

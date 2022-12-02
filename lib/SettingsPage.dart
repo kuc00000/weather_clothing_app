@@ -123,99 +123,6 @@ class _SettingsPageState extends State<SettingsPage> {
             indent: 10,
             endIndent: 10,
           ),
-          SizedBox(
-              height: 55,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    '   내 체질 정보',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 9,
-                        ),
-                        SliderTheme(
-                          data: SliderThemeData(
-                            thumbColor: Colors.white,
-                            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 11.0),
-                            overlayColor: Colors.green.withOpacity(0.18),
-                            overlayShape: RoundSliderOverlayShape(overlayRadius: 12.0),
-                            activeTrackColor: Color(0xFF34C759),
-                            inactiveTrackColor: Colors.grey.shade300,
-                            trackHeight: 11.0,
-                            showValueIndicator: ShowValueIndicator.never,
-                          ),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width/2,
-                            child: RangeSlider(
-                              values: _currentRangeValues,
-                              min: 0,
-                              max: 40,
-                              divisions: 40,
-                              labels: RangeLabels(
-                                _currentRangeValues.start.round().toString(),
-                                _currentRangeValues.end.round().toString(),
-                              ),
-                              onChanged: (RangeValues values) {
-                                setState(() {
-                                //  _currentRangeValues = values;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              '추워요',
-                              style: TextStyle(
-                                fontSize: 11,
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width/5-10,
-                            ),
-                            Text(
-                              '보통',
-                              style: TextStyle(
-                                fontSize: 11,
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width/5-10,
-                            ),
-                            Text(
-                              '더워요',
-                              style: TextStyle(
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          const Divider(
-            color: Colors.black,
-            thickness: 0.8,
-            height: 5,
-            indent: 10,
-            endIndent: 10,
-          ),
           GestureDetector(
             onTap: (){
               Navigator.pushNamed(context, '/closet');
@@ -224,21 +131,114 @@ class _SettingsPageState extends State<SettingsPage> {
               color: Colors.white,
               height: 55,
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '   내 옷장',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '   내 옷장',
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 15),
-                      child: Icon(Icons.chevron_right),
-                    ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 15),
+                    child: Icon(Icons.chevron_right),
+                  ),
+                ],
               ),
+            ),
+          ),
+          const Divider(
+            color: Colors.black,
+            thickness: 0.8,
+            height: 5,
+            indent: 10,
+            endIndent: 10,
+          ),
+          SizedBox(
+            height: 55,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  '   내 체질 정보',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 9,
+                      ),
+                      SliderTheme(
+                        data: SliderThemeData(
+                          thumbColor: Colors.white,
+                          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 11.0),
+                          overlayColor: Colors.green.withOpacity(0.18),
+                          overlayShape: RoundSliderOverlayShape(overlayRadius: 12.0),
+                          activeTrackColor: Color(0xFF34C759),
+                          inactiveTrackColor: Colors.grey.shade300,
+                          trackHeight: 11.0,
+                          showValueIndicator: ShowValueIndicator.never,
+                        ),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width/2,
+                          child: RangeSlider(
+                            values: _currentRangeValues,
+                            min: 0,
+                            max: 40,
+                            divisions: 40,
+                            labels: RangeLabels(
+                              _currentRangeValues.start.round().toString(),
+                              _currentRangeValues.end.round().toString(),
+                            ),
+                            onChanged: (RangeValues values) {
+                              setState(() {
+                                //  _currentRangeValues = values;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            '추워요',
+                            style: TextStyle(
+                              fontSize: 11,
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width/5-10,
+                          ),
+                          Text(
+                            '보통',
+                            style: TextStyle(
+                              fontSize: 11,
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width/5-10,
+                          ),
+                          Text(
+                            '더워요',
+                            style: TextStyle(
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           const Divider(
             color: Colors.black,
