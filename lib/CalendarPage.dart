@@ -35,7 +35,7 @@ class _CalendarPageState extends State<CalendarPage> {
   }
   _asyncMethod() async {
     final feedInfo = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser!.uid).get();
-    print(feedInfo.docs.map((e) => print(e.reference.id)));
+    // print(feedInfo.docs.map((e) => print(e.reference.id)));
     setState((){
       date = feedInfo.docs.toList();
     });
@@ -221,7 +221,7 @@ class _WeekClothListState extends State<WeekClothList> {
   }
   _asyncMethod() async {
     final feedInfo = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser!.uid).get();
-    print(feedInfo.docs.map((e) => print(e.reference.id)));
+    // print(feedInfo.docs.map((e) => print(e.reference.id)));
     setState((){
       date = feedInfo.docs.toList();
     });
@@ -253,8 +253,8 @@ class _WeekClothListState extends State<WeekClothList> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('${docs![index]['temperature']} `C'),
-                                Text('${feedbacks![docs![index]['feedback']]}'),
+                                Text('${docs?[index]['temperature']} `C'),
+                                docs?[index]['feedback']!=null?Text('${feedbacks?[docs?[index]['feedback']]}'):Container(),
                               ],
                             ),
                             Row(
@@ -263,15 +263,16 @@ class _WeekClothListState extends State<WeekClothList> {
                                   padding: const EdgeInsets.only(right: 10),
                                   child: Stack(
                                     children:[
+                                      docs?[index]['top']!=null?
                                     Image.asset(
                                       'top${docs?[index]['top']}.png',
                                       height: 45,
-                                    ),
+                                    ):Container(),
                                       Column(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(' '),
-                                          Text(tops![docs?[index]['top']],style: TextStyle(fontWeight: FontWeight.bold),)
+                                          docs?[index]['top']!=null?Text(tops![docs?[index]['top']],style: TextStyle(fontWeight: FontWeight.bold),):Container()
                                         ],
                                       )
                                     ]
@@ -281,15 +282,16 @@ class _WeekClothListState extends State<WeekClothList> {
                                   padding: const EdgeInsets.only(right: 10),
                                   child: Stack(
                                     children:[
+                                      docs?[index]['bottom']!=null?
                                     Image.asset(
                                       'bottom${docs?[index]['bottom']}.png',
                                       height: 45,
-                                    ),
+                                    ):Container(),
                                       Column(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(' '),
-                                          Text(bottoms![docs?[index]['bottom']],style: TextStyle(fontWeight: FontWeight.bold),)
+                                          docs?[index]['bottom']!=null?Text(bottoms![docs?[index]['bottom']],style: TextStyle(fontWeight: FontWeight.bold),):Container()
                                         ],
                                       )
                                     ]
@@ -298,15 +300,15 @@ class _WeekClothListState extends State<WeekClothList> {
                                 docs?[index]['outer']==-1?Container():
                                 Stack(
                                     children:[
-                                    Image.asset(
+                                      docs?[index]['outer']!=null?Image.asset(
                                       'outer${docs?[index]['outer']}.png',
                                       height: 45,
-                                    ),
+                                    ):Container(),
                                       Column(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(' '),
-                                          Text(outers![docs?[index]['outer']],style: TextStyle(fontWeight: FontWeight.bold),)
+                                          docs?[index]['outer']!=null?Text(outers![docs?[index]['outer']],style: TextStyle(fontWeight: FontWeight.bold),):Container()
                                         ],
                                       )
                                     ]
