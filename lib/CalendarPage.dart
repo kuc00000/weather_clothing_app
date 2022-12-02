@@ -207,10 +207,11 @@ class _WeekClothListState extends State<WeekClothList> {
     ,'여름블라우스','봄가을블라우스'];
   List<String>? bottoms=['숏팬츠','트레이닝팬츠','슬랙스','데님팬츠','코튼팬츠'
     ,'여름스커트','봄가을스커트','레깅스','겨울스커트'];
-  final List<String>? feedbacks = <String>['매우추웠어요','추웠어요','적당했어요','더웠어요','매우더웠어요'];
+  final List<String>? feedbacks = <String>['추웠어요','조금추웠어요','적당했어요','조금더웠어요','더웠어요'];
   final List<String> maxDayTemperature = <String>['24', '24', '25', '23', '20', '18', '16'];
   final List<String> minDayTemperature = <String>['14', '14', '15', '13', '10', '08', '06'];
   List<QueryDocumentSnapshot<Map<String, dynamic>>>? date;
+
   @override
   void initState(){
     super.initState();
@@ -256,12 +257,60 @@ class _WeekClothListState extends State<WeekClothList> {
                                 Text('${feedbacks![docs![index]['feedback']]}'),
                               ],
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            Row(
                               children: [
-                                docs?[index]['outer']==-1?Container():Text('${outers![docs![index]['outer']]}'),
-                                Text('${tops![docs?[index]['top']]}'),
-                                Text('${bottoms![docs![index]['bottom']]}'),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Stack(
+                                    children:[
+                                    Image.asset(
+                                      'top${docs?[index]['top']}.png',
+                                      height: 45,
+                                    ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(' '),
+                                          Text(tops![docs?[index]['top']],style: TextStyle(fontWeight: FontWeight.bold),)
+                                        ],
+                                      )
+                                    ]
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Stack(
+                                    children:[
+                                    Image.asset(
+                                      'bottom${docs?[index]['bottom']}.png',
+                                      height: 45,
+                                    ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(' '),
+                                          Text(bottoms![docs?[index]['bottom']],style: TextStyle(fontWeight: FontWeight.bold),)
+                                        ],
+                                      )
+                                    ]
+                                  ),
+                                ),
+                                docs?[index]['outer']==-1?Container():
+                                Stack(
+                                    children:[
+                                    Image.asset(
+                                      'outer${docs?[index]['outer']}.png',
+                                      height: 45,
+                                    ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(' '),
+                                          Text(outers![docs?[index]['outer']],style: TextStyle(fontWeight: FontWeight.bold),)
+                                        ],
+                                      )
+                                    ]
+                                  ),
                               ],
                             ),
                         ],
