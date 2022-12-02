@@ -143,7 +143,7 @@ class _feedbackPageState extends State<feedbackPage> {
                 int outerIndex = clothesName[0].indexOf(outerDropdownValue)-1;
                 int topIndex = clothesName[1].indexOf(topDropdownValue);
                 int bottomIndex = clothesName[2].indexOf(bottomDropdownValue);
-                double? temperature = context.read<Weather_Location>().temp;
+                int? temperature = context.read<Weather_Location>().temp?.toInt();
                 await FirebaseFirestore.instance
                     .collection(_authentication.currentUser!.uid)
                     .doc(DateTime.fromMicrosecondsSinceEpoch(Timestamp.now().microsecondsSinceEpoch+32400000000).toString().split(' ')[0])
@@ -151,7 +151,7 @@ class _feedbackPageState extends State<feedbackPage> {
                   'outer':outerIndex,
                   'top':topIndex,
                   'bottom':bottomIndex,
-                  'feedback':_sliderValue,
+                  'feedback':_sliderValue.toInt(),
                   'temperature':temperature
                 });
                 final myInfo = await FirebaseFirestore.instance.collection('user')
