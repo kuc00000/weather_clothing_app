@@ -26,6 +26,10 @@ class _MainPageState extends State<MainPage> {
   double? lat;
   double? lon;
 
+  final List<String> clothingOuter = <String>['환절기 코트', '가죽자켓', '가죽자켓', '가죽자켓', '가죽자켓'];
+  final List<String> clothingTop = <String>['긴팔티셔츠', '반팔티셔츠', '긴팔티셔츠', '반팔티셔츠', '반팔티셔츠'];
+  final List<String> clothingBottom = <String>['코튼팬츠', '코튼팬츠', '코튼팬츠', '코튼팬츠', '코튼팬츠'];
+
   @override
   void initState() {
     super.initState();
@@ -279,59 +283,92 @@ class _MainPageState extends State<MainPage> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Icon(Icons.arrow_back_ios_sharp, size: 40,),
-                const SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('그림'),
-                        const SizedBox(
-                          width: 20,
+            SizedBox(
+              height: 200,
+              child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+                        child: Container(
+                          height: 180,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 5,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                width: 380,
+                                child: Card(
+                                  color: Color(0xffF2F2F2),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text('상의',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          Text('${clothingTop[index]}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text('하의',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          Text('${clothingBottom[index]}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text('아우터',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          Text('${clothingOuter[index]}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                        Text('트위드 자켓'),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('그림'),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Text('가죽치마'),
-                      ],
+                      ),
                     ),
                   ],
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Icon(Icons.arrow_forward_ios_sharp, size: 40,),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 0.3,
-              color: Colors.black,
+              ),
             ),
             const SizedBox(
               height: 10,
+            ),
+            Container(
+              height: 1,
+              color: Colors.grey,
+            ),
+            const SizedBox(
+              height: 20,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
