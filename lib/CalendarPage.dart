@@ -339,7 +339,9 @@ class _WeekClothListState extends State<WeekClothList> {
                   builder: (context, snapshot) {
                     final docs = snapshot.data?.docs;
 
-                    return ListView.builder(
+                    return
+                      date?.length!=0?
+                      ListView.builder(
                       itemCount: docs?.length,
                       itemBuilder: (context, index) {
                         return ListTile(
@@ -455,7 +457,7 @@ class _WeekClothListState extends State<WeekClothList> {
                             // Text('${docs?[index]['top']}'),
                             );
                       },
-                    );
+                    ):Container();
                   },
                 );
               } else {
