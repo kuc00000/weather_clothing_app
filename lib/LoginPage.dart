@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'mainColor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -44,6 +45,7 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
   _asyncMethod() async {
+    final prefs = await SharedPreferences.getInstance();
     autoCheck = (await storage.read(key: "autologin"));
     if (autoCheck=='true'){
       UserInfo = (await storage.read(key: "login"));
@@ -52,8 +54,9 @@ class _LoginFormState extends State<LoginForm> {
             email: UserInfo!.split(' ')[0], password: UserInfo!.split(' ')[1]);
         if (currentUser.user!=null){
           if(!mounted) return;
+          prefs.setString('user', currentUser.user.toString());
           Navigator.pop(context);
-          Navigator.pushNamed(context, '/location');
+          Navigator.pushNamed(context, '/main');
         }
       }
     }

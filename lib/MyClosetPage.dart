@@ -48,7 +48,6 @@ class _MyClosetPageState extends State<MyClosetPage> {
     // print(myOuter);
     myTop = userInfo.data()!['top'];
     myBottom = userInfo.data()!['bottom'];
-    // print(context.watch<Users>().userSex);
   }
 
   @override
@@ -169,11 +168,42 @@ class _MyClosetPageState extends State<MyClosetPage> {
                         'top':context.read<Users>().myTop,
                         'bottom':context.read<Users>().myBottom
                       });
+                        if(!mounted) return;
                         context.read<Users>().setCloset('outer', myOuter);
                         context.read<Users>().setCloset('top', myTop);
                         context.read<Users>().setCloset('bottom', myBottom);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content:Text('저장되었습니다.',textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),));
+
+                        final userInfo = await FirebaseFirestore.instance.collection('user')
+                            .doc(FirebaseAuth.instance.currentUser!.uid).get();
+                        if(!mounted) return;
+                        if (userInfo.data()!['isFirstVisit']==true){
+                          await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).update({
+                            'isFirstVisit':false
+                          });
+                          showDialog(context: context,
+                              builder: (context) => SimpleDialog(
+                                title: const Center(child: Text('안내문')),
+                                contentPadding: const EdgeInsets.all(10),
+                                children: [
+                                  Center(child: Text('저장되었습니다.')),
+                                  TextButton(
+                                      onPressed: (){
+                                        Navigator.popUntil(context, (route) => route.isFirst);
+                                        // Navigator.pop(context);
+                                        Navigator.pushNamed(context, '/main');
+                                      },
+                                      child: const Text('확인'))
+                                ],
+                              ));
+                        }
+                        else{
+                          if(!mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content:Text('저장되었습니다.',textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),));
+                            Navigator.popUntil(context, (route) => route.isFirst);
+                            // Navigator.pop(context);
+                            Navigator.pushNamed(context, '/main');
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15,bottom: 15,right: 15,left: 15),

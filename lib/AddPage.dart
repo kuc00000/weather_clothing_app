@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-class AddPage extends StatefulWidget {
-  const AddPage({super.key, required this.title});
 
-  final String title;
+class AddPage extends StatefulWidget {
+  const AddPage({super.key});
 
   @override
   State<AddPage> createState() => _AddPageState();
@@ -16,8 +14,23 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Image.asset(
+          'appbar.png',
+          height: 45,
+        ),
+        actions: [
+          /* 로그아웃 코드 -> 그냥 옷장 종료 */
+          IconButton(onPressed: (){
+            Navigator.pop(context);
+          }, icon: Icon(Icons.clear,
+            color: Colors.black54,size: 30,))
+        ],
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
@@ -52,7 +65,7 @@ class _AddPageState extends State<AddPage> {
             ),
             ElevatedButton(onPressed: () {
               setState(() {
-                Navigator.pushNamed(context, '/select');
+                Navigator.pushNamed(context, '/closet');
               });
             },style: ElevatedButton.styleFrom(
               minimumSize: const Size(40,40),

@@ -9,18 +9,18 @@ import 'LocationAPI.dart';
 import 'Weather_Location.dart';
 
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class SelectPositionPage extends StatefulWidget {
+  const SelectPositionPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<SelectPositionPage> createState() => _SelectPositionPageState();
 }
 
 
 
-class _MyHomePageState extends State<MyHomePage> {
+class _SelectPositionPageState extends State<SelectPositionPage> {
   int pass = 0;
   final _openweatherkey = 'b2ece712030d8ca1ac751827e5e61afe';//FlutterConfig.get('apiKey');//'3cdec813571d0497b65e5a20577293b7';
   var prefs;
@@ -206,125 +206,124 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            centerTitle: true,
-            elevation: 0,
-            backgroundColor: Colors.white,
-            title: Image.asset(
-              'appbar.png',
-              height: 45,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Image.asset(
+          'appbar.png',
+          height: 45,
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              '우리 동네를 검색해 찾아보세요',
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  '우리 동네를 검색해 찾아보세요',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: const Icon(Icons.arrow_downward),
-                  elevation: 16,
-                  style: const TextStyle(color: Colors.deepPurple),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  onChanged: (String? value) {
-                    // This is called when the user selects an item.
-                    setState(() {
-                      dropdownValue = value!;
-
-                      cityList = ['지역을 선택해주세요.'];
-                      dropdownValue2= cityList.first;
-                    });
-
-                    getPosition(value!);
-                  },
-                  items: province.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                DropdownButton<String>(
-                  value: dropdownValue2,
-                  icon: const Icon(Icons.arrow_downward),
-                  elevation: 16,
-                  style: const TextStyle(color: Colors.deepPurple),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  onChanged: (String? value) {
-                    // This is called when the user selects an item.
-                    setState(() {
-                      dropdownValue2 = value!;
-                    });
-
-                    getWeatherDataByName(province:dropdownValue!,
-                        city_name:value!);
-
-                  },
-                  items: cityList.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-                const Text(
-                  '국내 도/시를 선택해주세요 ex) 경기도 광주시',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                const Text(
-                  '동네의 날씨와 추천 옷차림을 볼 수 있어요',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(onPressed: () {
-
-
-                  prefs.setString('province', dropdownValue);
-                  prefs.setString('city', dropdownValue2);
-                  prefs.setDouble('temp', temp);
-                  prefs.setDouble('feels_like', feels_like);
-                  prefs.setString('pm10', pm10_status);
-                  prefs.setString('pm10', pm10_status);
-                  prefs.setString('pm2_5', pm2_5_status);
-                  prefs.setString('description', description);
-                  prefs.setDouble('pop', pop);
-                  prefs.setDouble('lat', lat);
-                  prefs.setDouble('lon', lon);
-
-
-
-
-
-                  Navigator.pushNamed(context, '/add');
-                }, child: const Text('Next')),
-              ],
+            const SizedBox(
+              height: 20,
             ),
-          ),
+            DropdownButton<String>(
+              value: dropdownValue,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  dropdownValue = value!;
+
+                  cityList = ['지역을 선택해주세요.'];
+                  dropdownValue2= cityList.first;
+                });
+
+                getPosition(value!);
+              },
+              items: province.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+
+            DropdownButton<String>(
+              value: dropdownValue2,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  dropdownValue2 = value!;
+                });
+
+                getWeatherDataByName(province:dropdownValue!,
+                    city_name:value!);
+
+              },
+              items: cityList.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            const Text(
+              '국내 도/시를 선택해주세요 ex) 경기도 광주시',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+            const Text(
+              '동네의 날씨와 추천 옷차림을 볼 수 있어요',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(onPressed: () {
+
+              prefs.setString('province', dropdownValue);
+              prefs.setString('city', dropdownValue2);
+              prefs.setDouble('temp', temp);
+              prefs.setDouble('feels_like', feels_like);
+              prefs.setString('pm10', pm10_status);
+              prefs.setString('pm10', pm10_status);
+              prefs.setString('pm2_5', pm2_5_status);
+              prefs.setString('description', description);
+              prefs.setDouble('pop', pop);
+              prefs.setDouble('lat', lat);
+              prefs.setDouble('lon', lon);
+
+
+
+
+
+              Navigator.pushNamed(context, '/add');
+            }, child: const Text('Next')),
+          ],
+        ),
+      ),
     );
   }
 }

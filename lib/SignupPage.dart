@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'mainColor.dart';
 
 
@@ -10,8 +11,21 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        actions: [
+          /* 로그아웃 코드 -> 그냥 옷장 종료 */
+          IconButton(onPressed: (){
+            Navigator.pop(context);
+          }, icon: Icon(Icons.clear,
+            color: Colors.black54,size: 30,))
+        ],
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+      ),
       body: SignupForm(),
     );
   }
@@ -26,6 +40,7 @@ class SignupForm extends StatefulWidget {
 class _SignupFormState extends State<SignupForm> {
   final _authentication = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
+  static final storage = FlutterSecureStorage();
   String email='';
   String password1 = '';
   String password2 = '';
@@ -46,7 +61,7 @@ class _SignupFormState extends State<SignupForm> {
         key: _formKey,
         child: ListView(
           children: [
-            const SizedBox(height: 35,),
+            const SizedBox(height: 5,),
             Image.asset(
               'appbar.png',
               height: 60,
@@ -137,6 +152,7 @@ class _SignupFormState extends State<SignupForm> {
             ElevatedButton(
               onPressed:() async {
                 String notice='';
+                /* 입력한 비밀번호가 일치할 경우 */
                 if (password1 == password2 ){
                   password = password1;
                   try{
@@ -150,7 +166,9 @@ class _SignupFormState extends State<SignupForm> {
                       'userSex' : _sex,
                       'outer':myOuter,
                       'top':myTop,
-                      'bottom':myBottom
+                      'bottom':myBottom,
+                      'userConstitution':[30,35],
+                      'isFirstVisit':true
                     });
                     if (newUser.user !=null){
                       _formKey.currentState!.reset();
@@ -170,13 +188,16 @@ class _SignupFormState extends State<SignupForm> {
                     }
                   }
                 }
+                /* 비밀번호가 일치하지 않을 경우 */
                 else{
                   error = true;
                   notice = '비밀번호가 일치하지 않습니다.';
                 }
+                /* 에러가 발생한 경우 스냅바로 출력 */
                 if (error){
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(notice,textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),));
                 }
+                /* 에러없이 정상적으로 회원가입이 된 경우 */
                 else{
                   showDialog(context: context,
                       builder: (context) => SimpleDialog(

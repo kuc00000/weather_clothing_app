@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'TimeSetting.dart';
 import 'UserInfomation.dart';
+import 'FeedbackPage.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key, required this.title});
@@ -19,23 +22,31 @@ class _SettingsPageState extends State<SettingsPage> {
   String pass = '';
   bool _switch1 = true;
   bool _switch2 = true;
-  RangeValues _currentRangeValues = const RangeValues(0, 20);
+  RangeValues _currentRangeValues = RangeValues(0, 20);
   int currentPageIndex = 2;
   static final storage = FlutterSecureStorage();
   final _authentication = FirebaseAuth.instance;
   String? UserInfo='';
   String? UserId='';
+  var prefs;
   @override
   void initState(){
     super.initState();
+    intValue();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _asyncMethod();
     });
   }
+  void intValue() async{
+    prefs = await SharedPreferences.getInstance();
+  }
   _asyncMethod() async {
+    final myInfo = await FirebaseFirestore.instance.collection('user')
+        .doc(FirebaseAuth.instance.currentUser!.uid).get();
     UserInfo = (await storage.read(key: "login"));
     setState((){
       UserId = UserInfo!.split('@')[0];
+      _currentRangeValues = RangeValues(myInfo.data()!['userConstitution'][0].toDouble(), myInfo.data()!['userConstitution'][1].toDouble());
     });
   }
 
@@ -63,11 +74,11 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               SizedBox(width: 10,),
               Padding(
-                padding: const EdgeInsets.only(right: 13),
+                padding: const EdgeInsets.only(right: 20),
                 child: Text(
                   '${UserId} 님',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 19,
                     color: Colors.grey,
                     fontWeight: FontWeight.w400,
                   ),
@@ -76,7 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           const SizedBox(
-            height: 15,
+            height: 10,
           ),
           const Divider(
             color: Colors.black,
@@ -85,39 +96,61 @@ class _SettingsPageState extends State<SettingsPage> {
             indent: 10,
             endIndent: 10,
           ),
-          SizedBox(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '   피드백 설정',
-                  style: TextStyle(
-                    fontSize: 18,
+          GestureDetector(
+            onTap: (){
+              showDialog(context: context, builder: (BuildContext context){
+                return feedbackPage();
+              });
+            },
+            child: Container(
+              color: Colors.white,
+              height: 55,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '   오늘의 피드백',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
-                ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 5,
+                  Padding(
+                    padding: EdgeInsets.only(right: 15),
+                    child: Icon(Icons.chevron_right),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.black,
+            thickness: 0.8,
+            height: 5,
+            indent: 10,
+            endIndent: 10,
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.pushNamed(context, '/closet');
+            },
+            child: Container(
+              color: Colors.white,
+              height: 55,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '   내 옷장',
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
-                    Transform.scale(
-                      scale: 0.80,
-                      child: CupertinoSwitch(
-                        value: _switch1,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _switch1 = value;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 15),
+                    child: Icon(Icons.chevron_right),
+                  ),
+                ],
+              ),
             ),
           ),
           const Divider(
@@ -128,96 +161,18 @@ class _SettingsPageState extends State<SettingsPage> {
             endIndent: 10,
           ),
           SizedBox(
-            height: 50,
+            height: 55,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  '   피드백 알람 시간',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                Column(
-                  children: [
-                    CupertinoButton(
-                      child: Text('10:00 pm'), // TimeSetting에서 저장한 값을 여기에 넣기, 저장값이 없으면 10:00 pm이 기본
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return TimeSetting(title: 'time setting result',);
-                            }
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const Divider(
-            color: Colors.black,
-            thickness: 0.8,
-            height: 5,
-            indent: 10,
-            endIndent: 10,
-          ),
-          SizedBox(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '   여성복 추천',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Transform.scale(
-                      scale: 0.80,
-                      child: CupertinoSwitch(
-                        value: _switch2,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _switch2 = value;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const Divider(
-            color: Colors.black,
-            thickness: 0.8,
-            height: 5,
-            indent: 10,
-            endIndent: 10,
-          ),
-          SizedBox(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '   체질 설정',
+                  '   내 체질 정보',
                   style: TextStyle(
                     fontSize: 18,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.only(right: 20),
                   child: Column(
                     children: [
                       const SizedBox(
@@ -234,28 +189,28 @@ class _SettingsPageState extends State<SettingsPage> {
                           trackHeight: 11.0,
                           showValueIndicator: ShowValueIndicator.never,
                         ),
-                        child: RangeSlider(
-                          values: _currentRangeValues,
-                          min: 0,
-                          max: 20,
-                          divisions: 4,
-                          labels: RangeLabels(
-                            _currentRangeValues.start.round().toString(),
-                            _currentRangeValues.end.round().toString(),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width/2,
+                          child: RangeSlider(
+                            values: _currentRangeValues,
+                            min: 0,
+                            max: 40,
+                            divisions: 40,
+                            labels: RangeLabels(
+                              _currentRangeValues.start.round().toString(),
+                              _currentRangeValues.end.round().toString(),
+                            ),
+                            onChanged: (RangeValues values) {
+                              setState(() {
+                                //  _currentRangeValues = values;
+                              });
+                            },
                           ),
-                          onChanged: (RangeValues values) {
-                            setState(() {
-                              _currentRangeValues = values;
-                            });
-                          },
                         ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          SizedBox(
-                            width: 5,
-                          ),
+                        children: [
                           Text(
                             '추워요',
                             style: TextStyle(
@@ -263,7 +218,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           ),
                           SizedBox(
-                            width: 45,
+                            width: MediaQuery.of(context).size.width/5-10,
                           ),
                           Text(
                             '보통',
@@ -272,16 +227,13 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           ),
                           SizedBox(
-                            width: 45,
+                            width: MediaQuery.of(context).size.width/5-10,
                           ),
                           Text(
                             '더워요',
                             style: TextStyle(
                               fontSize: 11,
                             ),
-                          ),
-                          SizedBox(
-                            width: 5,
                           ),
                         ],
                       ),
@@ -303,47 +255,40 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           GestureDetector(
             onTap: (){
-              Navigator.pushNamed(context, '/closet');
-            },
-            child: Container(
-              color: Colors.white,
-              height: 50,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '   내 옷장',
-                      style: TextStyle(
-                        fontSize: 18,
+              showDialog(context: context,
+                  builder: (context) => SimpleDialog(
+                    title: const Center(child: Text('안내문')),
+                    contentPadding: const EdgeInsets.all(10),
+                    children: [
+                      Center(child: Text('로그아웃 하시겠습니까?')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                              onPressed: (){
+                                context.read<Users>().readDB();
+                                FirebaseAuth.instance.signOut();
+                                storage.delete(key: 'login');
+                                prefs.remove('user');
+
+                                Navigator.popUntil(context,(route)=>route.isFirst);
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, '/login');
+                              },
+                              child: const Text('확인')),
+                          TextButton(
+                              onPressed: (){ Navigator.pop(context);},
+                              child: const Text('취소')),
+                        ],
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 15),
-                      child: Icon(Icons.chevron_right),
-                    ),
-                  ],
-                ),
-              ),
-          ),
-          const Divider(
-            color: Colors.black,
-            thickness: 0.8,
-            height: 5,
-            indent: 10,
-            endIndent: 10,
-          ),
-          GestureDetector(
-            onTap: (){
-              context.read<Users>().readDB();
-              FirebaseAuth.instance.signOut();
-              storage.delete(key: 'login');
-              Navigator.popUntil(context,(route)=>route.isFirst);
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/login');
+
+                    ],
+                  )
+              );
             },
             child: Container(
               color: Colors.white,
-              height: 50,
+              height: 55,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -376,10 +321,13 @@ class _SettingsPageState extends State<SettingsPage> {
           setState(() {
             currentPageIndex = index;
             if (index == 0) {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/main',);
             } else if (index == 1) {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/calendar');
             } else {
+              Navigator.pop(context);
               Navigator.pushNamed(context, '/settings');
             }
           });
