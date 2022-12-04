@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app2/mainColor.dart';
+import 'OutfitRecommender.dart';
+import 'UserInfomation.dart';
 import 'Weather_Location.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,14 +67,8 @@ class _MainPageState extends State<MainPage> {
   String? description;
   String? city;
 
-  final List<String> clothingOuter = <String>['환절기 코트', '가죽자켓', '가죽자켓', '가죽자켓', '가죽자켓'];
-  final List<String> clothingTop = <String>['긴팔티셔츠', '반팔티셔츠', '긴팔티셔츠', '반팔티셔츠', '반팔티셔츠'];
-  final List<String> clothingBottom = <String>['코튼팬츠', '코튼팬츠', '코튼팬츠', '코튼팬츠', '코튼팬츠'];
-
-
-
-
   List<Weather> weatherList = [];
+  List<List <int>> recommendList = [[1,3,4],[3,5,6],[2,5,2],[-1,0,0]];
 
   @override
   void initState() {
@@ -78,7 +76,19 @@ class _MainPageState extends State<MainPage> {
     super.initState();
 
     getWeeklyWeather();
-
+    _asyncMethod();
+  }
+  _asyncMethod() async {
+    final myInfo = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    if(!mounted)return;
+    recommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temp!.toInt(),
+        context.read<Users>().getOuter(),
+        context.read<Users>().getTop(),
+        context.read<Users>().getBottom());
+    print(recommendList);
   }
 
 
@@ -163,10 +173,6 @@ class _MainPageState extends State<MainPage> {
 
         }
 
-
-
-
-
       } else {
         print('response status code = ${response.statusCode}');
       }
@@ -196,55 +202,31 @@ class _MainPageState extends State<MainPage> {
 
 
     switch(description){
-      case 'clear sky':
-        image = '01d@2x.png';
-
+      case 'clear sky': image = '01d@2x.png';
         break;
-      case 'few clouds':
-        image = '02d@2x.png';
-
+      case 'few clouds': image = '02d@2x.png';
         break;
-      case 'scattered clouds':
-        image = '03d@2x.png';
-
+      case 'scattered clouds': image = '03d@2x.png';
         break;
-      case 'light rain':
-        image ='10d@2x.png';
+      case 'light rain': image ='10d@2x.png';
         break;
-      case 'broken clouds':
-        image = '04d@2x.png';
-
+      case 'broken clouds':image = '04d@2x.png';
         break;
-      case 'shower rain':
-        image = '09d@2x.png';
-
+      case 'shower rain':image = '09d@2x.png';
         break;
-      case 'light snow':
-        image = '13d@2x.png';
+      case 'light snow':image = '13d@2x.png';
         break;
-
-      case 'rain':
-        image = '10d@2x.png';
-
+      case 'rain':image = '10d@2x.png';
         break;
-      case 'overcast clouds':
-        image = '04d@2x.png';
+      case 'overcast clouds':image = '04d@2x.png';
         break;
-      case 'thunderstorm':
-        image = '11d@2x.png';
-
+      case 'thunderstorm':image = '11d@2x.png';
         break;
-      case 'snow':
-        image = '13d@2x.png';
-
+      case 'snow':image = '13d@2x.png';
         break;
-      case 'mist':
-        image = '50d@2x.png';
-
+      case 'mist':image = '50d@2x.png';
         break;
-
     }
-
 
     return Scaffold(
       appBar: AppBar(
@@ -414,64 +396,9 @@ class _MainPageState extends State<MainPage> {
                         height: 180,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: 5,
+                          itemCount: recommendList.length,
                           itemBuilder: (context, index) {
-                            return Container(
-                              width: 380,
-                              child: Card(
-                                color: Color(0xffF2F2F2),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text('상의',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Text('${clothingTop[index]}',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text('하의',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Text('${clothingBottom[index]}',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text('아우터',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Text('${clothingOuter[index]}',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
+                            return recommendTile(recommendList: recommendList[index]);
                           },
                         ),
                       ),
@@ -533,115 +460,6 @@ class _MainPageState extends State<MainPage> {
                     },
              ),
 
-
-            /*Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text(
-                  '수',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                const Text(
-                  '날씨그림',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '20~24℃',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                    const Text(
-                      '반팔 티셔츠, 가디건',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text(
-                  '목',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                const Text(
-                  '날씨그림',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '20~24℃',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                    const Text(
-                      '반팔 티셔츠, 가디건',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text(
-                  '금',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                const Text(
-                  '날씨그림',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '20~24℃',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                    const Text(
-                      '반팔 티셔츠, 가디건',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),*/
           ],
         ),
       ),
@@ -722,4 +540,238 @@ class WeatherListElement extends StatelessWidget {
     );
   }
 
+}
+
+class recommendTile extends StatefulWidget {
+  recommendTile({Key? key, required this.recommendList}) : super(key: key);
+
+  List<int> recommendList = [1,3,4];
+
+  @override
+  State<recommendTile> createState() => _recommendTileState();
+}
+
+class _recommendTileState extends State<recommendTile> {
+
+  List<String> outers=['바람막이', '청자켓','야상','트러커자켓','가디건',
+    '플리스','야구잠바','항공잠바','가죽자켓','환절기코트','조끼패딩',
+    '무스탕','숏패딩','겨울코트','돕바','롱패딩'];
+  List<String> tops=['민소매티','반소매티','긴소매티','셔츠','맨투맨','후드티셔츠','목폴라','니트'
+    ,'여름블라우스','봄가을블라우스'];
+  List<String> bottoms=['숏팬츠','트레이닝팬츠','슬랙스','데님팬츠','코튼팬츠'
+    ,'여름스커트','봄가을스커트','레깅스','겨울스커트'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: Stack(
+        children: [Container(
+          width: 380,
+          height: 250,
+          child: Center(
+            child: Container(
+              width: 360,
+              height: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(17),
+                color: Color(0xffdec0ae),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 10,
+                    offset: Offset(-8,-8),
+                    color: Colors.white
+                  ),
+                  BoxShadow(
+                    blurRadius: 10,
+                    offset: Offset(8,8),
+                    color: Color(0xFFA7A9AF)
+                  )
+                ]
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Stack(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16,left: 5),
+                                child:Container(
+                                  height: 100,
+                                  width: 95,
+                                  // color: Colors.white,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [BoxShadow(
+                                      blurRadius: 1,
+                                      offset: Offset(0,0),
+                                      color: Colors.white
+                                    )]
+                                  ),
+                                  child: Image.asset(
+                                         'top${widget.recommendList[1]}.png',
+                                         width: 90,
+                                      ),
+                                )
+                                // CircleAvatar(
+                                //   radius: 50,
+                                //   backgroundColor: Colors.white,
+                                //   child: Image.asset(
+                                //     'top${widget.recommendList[1]}.png',
+                                //     width: 90,
+                                //   ),
+                                // ),
+                              )
+                            ],
+                          ),
+                          Container(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text('${tops[widget.recommendList[1]]}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Stack(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16,left: 2.5),
+                                child: Container(
+                                  height: 100,
+                                  width: 95,
+                                  // color: Colors.white,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [BoxShadow(
+                                          blurRadius: 1,
+                                          offset: Offset(0,0),
+                                          color: Colors.white
+                                      )]
+                                  ),
+                                  child: Image.asset(
+                                    'bottom${widget.recommendList[2]}.png',
+                                    width: 90,
+                                  ),
+                                )
+                              )
+                            ],
+                          ),
+                          Container(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('${bottoms[widget.recommendList[2]]}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      widget.recommendList[0]!=-1?
+                      Stack(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Container(
+                                  height: 100,
+                                  width: 95,
+                                  // color: Colors.white,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [BoxShadow(
+                                          blurRadius: 1,
+                                          offset: Offset(0,0),
+                                          color: Colors.white
+                                      )]
+                                  ),
+                                  child: Image.asset(
+                                    'outer${widget.recommendList[0]}.png',
+                                    width: 90,
+                                  ),
+                                )
+                              )
+                            ],
+                          ),
+                          Container(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 2),
+                                  child: Text('${outers[widget.recommendList[0]]}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ):Container(width: 100,),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 3,top: 2),
+                                child: CircleAvatar(
+                                  radius: 8,
+                                  backgroundColor: Colors.white,
+                                  ),
+                              ),
+
+                            ],
+                          ),
+                    ],
+                  ),
+              ),
+            ),
+          ),
+        ),
+          Container(
+            width: 380,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(''),
+                Image.asset(
+                  'label.png',
+                  height: 100,
+                ),
+              ],
+            ),
+          )
+        ]
+      ),
+    );
+  }
 }

@@ -17,6 +17,18 @@ class Users with ChangeNotifier{
     myBottom = userInfo.data()!['bottom'];
     notifyListeners();
   }
+  getOuter(){
+    return myOuter;
+    notifyListeners();
+  }
+  getTop(){
+    return myTop;
+    notifyListeners();
+  }
+  getBottom(){
+    return myBottom;
+    notifyListeners();
+  }
   setUserSex(sex){
     userSex = sex;
     notifyListeners();

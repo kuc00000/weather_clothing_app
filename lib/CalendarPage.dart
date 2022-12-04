@@ -112,7 +112,8 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
               firstDay: DateTime.utc(2022, 11, 1),
               lastDay: DateTime.utc(2023, 12, 31),
-              focusedDay: DateTime.now(),
+              focusedDay: DateTime.fromMicrosecondsSinceEpoch(DateTime.now().microsecondsSinceEpoch+32400000000),
+              currentDay: DateTime.fromMicrosecondsSinceEpoch(DateTime.now().microsecondsSinceEpoch+32400000000),
               locale: 'ko-KR',
               daysOfWeekHeight: 30,
               headerStyle: HeaderStyle(
