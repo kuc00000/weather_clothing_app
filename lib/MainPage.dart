@@ -84,6 +84,8 @@ class _MainPageState extends State<MainPage> {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     if(!mounted)return;
+    context.read<Users>().readDB();
+    print(context.read<Users>().getOuter());
     setState((){
       recommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temp!.toInt(),
           context.read<Users>().getOuter(),
@@ -391,16 +393,20 @@ class _MainPageState extends State<MainPage> {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 7.0),
-                      child: recommendList.length!=0?Container(
+                      child:
+                      recommendList.length!=0?
+                      Container(
                         height: 180,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: recommendList.length,
                           itemBuilder: (context, index) {
+                            print('innnndex${index}');
                             return recommendTile(recommendList: recommendList[index]);
                           },
                         ),
-                      ):EmptyCard(),
+                      )
+                          :EmptyCard(),
                     ),
                   ),
                 ],
@@ -588,8 +594,8 @@ class _recommendTileState extends State<recommendTile> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child:
-                (widget.recommendList[0]==-1&&widget.recommendList[1]==-1&&widget.recommendList[2]==-1)
-                ||widget.recommendList.length==0?
+                ((widget.recommendList[0]!=-1||widget.recommendList[1]!=-1||widget.recommendList[2]!=-1)
+                &&(widget.recommendList.length!=0))?
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -828,7 +834,7 @@ class _EmptyCardState extends State<EmptyCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 40),
+                            padding: const EdgeInsets.only(left: 45),
                             child: Center(child: Text('가지고 계신 옷중에서 \n오늘 날씨에 적합한 옷을 찾지 못했습니다.',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)),

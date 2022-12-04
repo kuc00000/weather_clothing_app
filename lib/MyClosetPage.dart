@@ -43,11 +43,13 @@ class _MyClosetPageState extends State<MyClosetPage> {
   _asyncMethod() async {
     final userInfo = await FirebaseFirestore.instance.collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid).get();
-    userSex = userInfo.data()!['userSex'] ;
-    myOuter = userInfo.data()!['outer'];
-    // print(myOuter);
-    myTop = userInfo.data()!['top'];
-    myBottom = userInfo.data()!['bottom'];
+    setState((){
+      userSex = userInfo.data()!['userSex'] ;
+      myOuter = userInfo.data()!['outer'];
+      // print(myOuter);
+      myTop = userInfo.data()!['top'];
+      myBottom = userInfo.data()!['bottom'];
+    });
   }
 
   @override
