@@ -45,7 +45,7 @@ final bottoms =[
 ];
 //
 List<List<int>> outfitRecommendation(List<int> userConstitution,int degree,
-    List<bool> userOuters,List<bool> userTops, List<bool> userBottoms) {
+    List<dynamic> userOuters,List<dynamic> userTops, List<dynamic> userBottoms) {
   // [lowerBound, upperBound, clothID]
   // final womanBoth =[
   //   [0,8,0],//여름원피스

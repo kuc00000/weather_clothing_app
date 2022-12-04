@@ -68,7 +68,7 @@ class _MainPageState extends State<MainPage> {
   String? city;
 
   List<Weather> weatherList = [];
-  List<List <int>> recommendList = [[1,3,4],[3,5,6],[2,5,2],[-1,0,0]];
+  List<List <int>> recommendList = [[-1,-1,-1],[1,3,4],[3,5,6],[2,5,2],[-1,0,0]];
 
   @override
   void initState() {
@@ -84,18 +84,20 @@ class _MainPageState extends State<MainPage> {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     if(!mounted)return;
-    recommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temp!.toInt(),
-        context.read<Users>().getOuter(),
-        context.read<Users>().getTop(),
-        context.read<Users>().getBottom());
-    print(recommendList);
+    setState((){
+      recommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temp!.toInt(),
+          context.read<Users>().getOuter(),
+          context.read<Users>().getTop(),
+          context.read<Users>().getBottom());
+    });
+
+    print('오늘의 추천 : ${recommendList}');
   }
 
 
   Future<void> initValue() async{
     prefs = await SharedPreferences.getInstance();
     setState((){
-
 
       city =prefs.getString('city');
       temp = prefs.getDouble('temp');
@@ -382,17 +384,14 @@ class _MainPageState extends State<MainPage> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
             SizedBox(
               height: 200,
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-                      child: Container(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 7.0),
+                      child: recommendList.length!=0?Container(
                         height: 180,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -401,21 +400,18 @@ class _MainPageState extends State<MainPage> {
                             return recommendTile(recommendList: recommendList[index]);
                           },
                         ),
-                      ),
+                      ):EmptyCard(),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 1,
+            const Divider(
               color: Colors.grey,
-            ),
-            const SizedBox(
-              height: 20,
+              thickness: 0.8,
+              height: 5,
+              indent: 10,
+              endIndent: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -569,7 +565,7 @@ class _recommendTileState extends State<recommendTile> {
         children: [Container(
           width: 380,
           height: 250,
-          child: Center(
+          child:Center(
             child: Container(
               width: 360,
               height: 150,
@@ -591,7 +587,10 @@ class _recommendTileState extends State<recommendTile> {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Row(
+                child:
+                (widget.recommendList[0]==-1&&widget.recommendList[1]==-1&&widget.recommendList[2]==-1)
+                ||widget.recommendList.length==0?
+                Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Stack(
@@ -752,7 +751,14 @@ class _recommendTileState extends State<recommendTile> {
                             ],
                           ),
                     ],
+                  ):Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Center(child: Text('가지고 계신 옷중에서 \n오늘 날씨에 적합한 옷을 찾지 못했습니다.',
+                      textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)),
                   ),
+                ),
               ),
             ),
           ),
@@ -775,3 +781,95 @@ class _recommendTileState extends State<recommendTile> {
     );
   }
 }
+class EmptyCard extends StatefulWidget {
+  const EmptyCard({Key? key}) : super(key: key);
+
+  @override
+  State<EmptyCard> createState() => _EmptyCardState();
+}
+
+class _EmptyCardState extends State<EmptyCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: Stack(
+          children: [
+
+            Container(
+            width: 380,
+            height: 190,
+            child:Center(
+              child: Container(
+                width: 360,
+                height: 150,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(17),
+                    color: Color(0xffdec0ae),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 10,
+                          offset: Offset(-8,-8),
+                          color: Colors.white
+                      ),
+                      BoxShadow(
+                          blurRadius: 10,
+                          offset: Offset(8,8),
+                          color: Color(0xFFA7A9AF)
+                      )
+                    ]
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child:Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40),
+                            child: Center(child: Text('가지고 계신 옷중에서 \n오늘 날씨에 적합한 옷을 찾지 못했습니다.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15,top: 2),
+                                child: CircleAvatar(
+                                  radius: 7,
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                  )
+              ),
+            ),
+            Container(
+              width: 380,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(''),
+                  Image.asset(
+                    'label.png',
+                    height: 100,
+                  ),
+                ],
+              ),
+            )
+          ]
+      ),
+    );
+  }
+}
+
