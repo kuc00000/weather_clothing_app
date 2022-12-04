@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:weather_app2/mainColor.dart';
 
 import 'Weather_Location.dart';
 
@@ -158,6 +159,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     Transform.scale(
                       scale: 0.70,
                       child: CupertinoSwitch(
+                        activeColor: AppColor.mainColor,
                         value: _calendarswitch,
                         onChanged: (bool value) {
                           setState(() {
@@ -211,7 +213,7 @@ class _CalendarPageState extends State<CalendarPage> {
             label: '설정',
           ),
         ],
-        selectedItemColor: Colors.lightBlue,
+        selectedItemColor: AppColor.mainColor,
       ),
     );
   }

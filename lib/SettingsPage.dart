@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_app2/mainColor.dart';
 import 'TimeSetting.dart';
 import 'UserInfomation.dart';
 import 'FeedbackPage.dart';
@@ -196,7 +197,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           overlayColor: Colors.green.withOpacity(0.18),
                           overlayShape:
                               RoundSliderOverlayShape(overlayRadius: 12.0),
-                          activeTrackColor: Color(0xFF34C759),
+                          activeTrackColor: AppColor.mainColor,
                           inactiveTrackColor: Colors.grey.shade300,
                           trackHeight: 11.0,
                           showValueIndicator: ShowValueIndicator.never,
@@ -363,7 +364,7 @@ class _SettingsPageState extends State<SettingsPage> {
             label: '설정',
           ),
         ],
-        selectedItemColor: Colors.lightBlue,
+        selectedItemColor: AppColor.mainColor,
       ),
     );
   }

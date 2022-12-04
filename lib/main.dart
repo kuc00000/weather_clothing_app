@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
             title: 'Weather clothing app',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              primarySwatch: buildMaterialColor(const Color(0xff78E2DF)),
+              primarySwatch: buildMaterialColor(AppColor.mainColor),
             ),
             initialRoute: '/',
             routes: {

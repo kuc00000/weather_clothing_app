@@ -201,7 +201,7 @@ class _LoginFormState extends State<LoginForm> {
                 padding: EdgeInsets.all(10.0),
                 child: Text(
                   '로그인',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15,color: Colors.white),
                 ),
               ),
             ),

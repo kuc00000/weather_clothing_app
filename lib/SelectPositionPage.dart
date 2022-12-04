@@ -315,10 +315,6 @@ class _SelectPositionPageState extends State<SelectPositionPage> {
               prefs.setDouble('lat', lat);
               prefs.setDouble('lon', lon);
 
-
-
-
-
               Navigator.pushNamed(context, '/add');
             }, child: const Text('Next')),
           ],

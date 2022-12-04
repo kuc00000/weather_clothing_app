@@ -221,7 +221,8 @@ class _SignupFormState extends State<SignupForm> {
                 child: Text('회원가입',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 15
+                      fontSize: 15,
+                    color: Colors.white
                   ),),
               ),
             )

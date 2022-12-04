@@ -189,7 +189,7 @@ class _MyClosetPageState extends State<MyClosetPage> {
                                   TextButton(
                                       onPressed: (){
                                         Navigator.popUntil(context, (route) => route.isFirst);
-                                        // Navigator.pop(context);
+                                        Navigator.pop(context);
                                         Navigator.pushNamed(context, '/main');
                                       },
                                       child: const Text('확인'))
@@ -201,7 +201,7 @@ class _MyClosetPageState extends State<MyClosetPage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content:Text('저장되었습니다.',textAlign: TextAlign.center,),duration: Duration(milliseconds: 1000),));
                             Navigator.popUntil(context, (route) => route.isFirst);
-                            // Navigator.pop(context);
+                            Navigator.pop(context);
                             Navigator.pushNamed(context, '/main');
                         }
                       },

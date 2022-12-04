@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:weather_app2/mainColor.dart';
 import 'Weather_Location.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -675,7 +676,7 @@ class _MainPageState extends State<MainPage> {
             label: '설정',
           ),
         ],
-        selectedItemColor: Colors.lightBlue,
+        selectedItemColor: AppColor.mainColor,
       ),
     );
   }
