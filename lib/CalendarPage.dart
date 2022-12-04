@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -18,7 +19,6 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-
   String pass = '';
   bool _calendarswitch = true;
   int currentPageIndex = 1;
@@ -27,23 +27,24 @@ class _CalendarPageState extends State<CalendarPage> {
   int lenDate = 0;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _asyncMethod();
     });
   }
+
   _asyncMethod() async {
-    final feedInfo = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser!.uid).get();
+    final feedInfo = await FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.uid)
+        .get();
     // print(feedInfo.docs.map((e) => print(e.reference.id)));
-    setState((){
+    setState(() {
       date = feedInfo.docs.toList();
     });
     lenDate = date!.length;
     // date?.removeAt(date!.length);
   }
-
-
 
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -70,21 +71,41 @@ class _CalendarPageState extends State<CalendarPage> {
             child: TableCalendar(
               calendarBuilders: CalendarBuilders(
                 dowBuilder: (context, day) {
-                  switch(day.weekday){
+                  switch (day.weekday) {
                     case 1:
-                      return Center(child: Text('월'),);
+                      return Center(
+                        child: Text('월'),
+                      );
                     case 2:
-                      return Center(child: Text('화'),);
+                      return Center(
+                        child: Text('화'),
+                      );
                     case 3:
-                      return Center(child: Text('수'),);
+                      return Center(
+                        child: Text('수'),
+                      );
                     case 4:
-                      return Center(child: Text('목'),);
+                      return Center(
+                        child: Text('목'),
+                      );
                     case 5:
-                      return Center(child: Text('금'),);
+                      return Center(
+                        child: Text('금'),
+                      );
                     case 6:
-                      return Center(child: Text('토',style: TextStyle(color: Colors.blue),),);
+                      return Center(
+                        child: Text(
+                          '토',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      );
                     case 7:
-                      return Center(child: Text('일',style: TextStyle(color: Colors.red),),);
+                      return Center(
+                        child: Text(
+                          '일',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      );
                   }
                 },
               ),
@@ -111,9 +132,13 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
               ),
               eventLoader: (day) {
-                for(int i=0;i<lenDate;i++){
-                  if( (int.parse(date![i].reference.id.toString().split('-')[2])==day.day)
-                      &&(int.parse(date![i].reference.id.toString().split('-')[1])==day.month)){
+                for (int i = 0; i < lenDate; i++) {
+                  if ((int.parse(
+                              date![i].reference.id.toString().split('-')[2]) ==
+                          day.day) &&
+                      (int.parse(
+                              date![i].reference.id.toString().split('-')[1]) ==
+                          day.month)) {
                     return ['feedback'];
                   }
                 }
@@ -152,7 +177,7 @@ class _CalendarPageState extends State<CalendarPage> {
               ],
             ),
           ),
-          _calendarswitch?WeekClothList():Container(),
+          _calendarswitch ? WeekClothList() : Container(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -193,139 +218,243 @@ class _CalendarPageState extends State<CalendarPage> {
 }
 
 class WeekClothList extends StatefulWidget {
-
   @override
   State<WeekClothList> createState() => _WeekClothListState();
 }
 
 class _WeekClothListState extends State<WeekClothList> {
-
-  List<String>? outers=['바람막이', '청자켓','야상','트러커자켓','가디건',
-    '플리스','야구잠바','항공잠바','가죽자켓','환절기코트','조끼패딩',
-    '무스탕','숏패딩','겨울코트','돕바','롱패딩'];
-  List<String>? tops=['민소매티','반소매티','긴소매티','셔츠','맨투맨','후드티셔츠','목폴라','니트'
-    ,'여름블라우스','봄가을블라우스'];
-  List<String>? bottoms=['숏팬츠','트레이닝팬츠','슬랙스','데님팬츠','코튼팬츠'
-    ,'여름스커트','봄가을스커트','레깅스','겨울스커트'];
-  final List<String>? feedbacks = <String>['추웠어요','조금추웠어요','적당했어요','조금더웠어요','더웠어요'];
-  final List<String> maxDayTemperature = <String>['24', '24', '25', '23', '20', '18', '16'];
-  final List<String> minDayTemperature = <String>['14', '14', '15', '13', '10', '08', '06'];
+  List<String>? outers = [
+    '바람막이',
+    '청자켓',
+    '야상',
+    '트러커자켓',
+    '가디건',
+    '플리스',
+    '야구잠바',
+    '항공잠바',
+    '가죽자켓',
+    '환절기코트',
+    '조끼패딩',
+    '무스탕',
+    '숏패딩',
+    '겨울코트',
+    '돕바',
+    '롱패딩'
+  ];
+  List<String>? tops = [
+    '민소매티',
+    '반소매티',
+    '긴소매티',
+    '셔츠',
+    '맨투맨',
+    '후드티셔츠',
+    '목폴라',
+    '니트',
+    '여름블라우스',
+    '봄가을블라우스'
+  ];
+  List<String>? bottoms = [
+    '숏팬츠',
+    '트레이닝팬츠',
+    '슬랙스',
+    '데님팬츠',
+    '코튼팬츠',
+    '여름스커트',
+    '봄가을스커트',
+    '레깅스',
+    '겨울스커트'
+  ];
+  final List<String>? feedbacks = <String>[
+    '추웠어요',
+    '조금추웠어요',
+    '적당했어요',
+    '조금더웠어요',
+    '더웠어요'
+  ];
+  final List<String> maxDayTemperature = <String>[
+    '24',
+    '24',
+    '25',
+    '23',
+    '20',
+    '18',
+    '16'
+  ];
+  final List<String> minDayTemperature = <String>[
+    '14',
+    '14',
+    '15',
+    '13',
+    '10',
+    '08',
+    '06'
+  ];
   List<QueryDocumentSnapshot<Map<String, dynamic>>>? date;
 
+  double? temp;
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _asyncMethod();
     });
   }
+
   _asyncMethod() async {
-    final feedInfo = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser!.uid).get();
+    final feedInfo = await FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.uid)
+        .get();
     // print(feedInfo.docs.map((e) => print(e.reference.id)));
-    setState((){
+    setState(() {
       date = feedInfo.docs.toList();
     });
+
     // date?.removeAt(date!.length);
+  }
+
+  Future<double> initValue() async {
+    final prefs = await SharedPreferences.getInstance();
+    temp = prefs.getDouble('temp');
+    return temp!;
   }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection(FirebaseAuth.instance.currentUser!.uid)
-              .where('temperature',isGreaterThan:context.read<Weather_Location>().temp!.toInt()-30, isLessThan: context.read<Weather_Location>().temp!.toInt()+30 )
-              .snapshots(),
-          builder: (context,snapshot){
-            final docs = snapshot.data?.docs;
+        child: FutureBuilder(
+            future: initValue(),
+            builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+              if (snapshot.hasData) {
+                return StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection(FirebaseAuth.instance.currentUser!.uid)
+                      .where('temperature',
+                          isGreaterThan: temp!.toInt() - 30,
+                          isLessThan: temp!.toInt() + 30)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    final docs = snapshot.data?.docs;
 
-            return ListView.builder(
-              itemCount: docs?.length,
-              itemBuilder: (context,index){
-                return ListTile(
-                  title:Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                            Text('${date?[index].reference.id.toString()}'),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                    return ListView.builder(
+                      itemCount: docs?.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                            title: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Text('${docs?[index]['temperature']} `C'),
-                                docs?[index]['feedback']!=null?Text('${feedbacks?[docs?[index]['feedback']]}'):Container(),
+                                Text('${date?[index].reference.id.toString()}'),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('${docs?[index]['temperature']} `C'),
+                                    docs?[index]['feedback'] != null
+                                        ? Text(
+                                            '${feedbacks?[docs?[index]['feedback']]}')
+                                        : Container(),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Stack(children: [
+                                        docs?[index]['top'] != null
+                                            ? Image.asset(
+                                                'top${docs?[index]['top']}.png',
+                                                height: 45,
+                                              )
+                                            : Container(),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(' '),
+                                            docs?[index]['top'] != null
+                                                ? Text(
+                                                    tops![docs?[index]['top']],
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                : Container()
+                                          ],
+                                        )
+                                      ]),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Stack(children: [
+                                        docs?[index]['bottom'] != null
+                                            ? Image.asset(
+                                                'bottom${docs?[index]['bottom']}.png',
+                                                height: 45,
+                                              )
+                                            : Container(),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(' '),
+                                            docs?[index]['bottom'] != null
+                                                ? Text(
+                                                    bottoms![docs?[index]
+                                                        ['bottom']],
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                : Container()
+                                          ],
+                                        )
+                                      ]),
+                                    ),
+                                    docs?[index]['outer'] == -1
+                                        ? Container()
+                                        : Stack(children: [
+                                            docs?[index]['outer'] != null
+                                                ? Image.asset(
+                                                    'outer${docs?[index]['outer']}.png',
+                                                    height: 45,
+                                                  )
+                                                : Container(),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(' '),
+                                                docs?[index]['outer'] != null
+                                                    ? Text(
+                                                        outers![docs?[index]
+                                                            ['outer']],
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      )
+                                                    : Container()
+                                              ],
+                                            )
+                                          ]),
+                                  ],
+                                ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Stack(
-                                    children:[
-                                      docs?[index]['top']!=null?
-                                    Image.asset(
-                                      'top${docs?[index]['top']}.png',
-                                      height: 45,
-                                    ):Container(),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(' '),
-                                          docs?[index]['top']!=null?Text(tops![docs?[index]['top']],style: TextStyle(fontWeight: FontWeight.bold),):Container()
-                                        ],
-                                      )
-                                    ]
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Stack(
-                                    children:[
-                                      docs?[index]['bottom']!=null?
-                                    Image.asset(
-                                      'bottom${docs?[index]['bottom']}.png',
-                                      height: 45,
-                                    ):Container(),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(' '),
-                                          docs?[index]['bottom']!=null?Text(bottoms![docs?[index]['bottom']],style: TextStyle(fontWeight: FontWeight.bold),):Container()
-                                        ],
-                                      )
-                                    ]
-                                  ),
-                                ),
-                                docs?[index]['outer']==-1?Container():
-                                Stack(
-                                    children:[
-                                      docs?[index]['outer']!=null?Image.asset(
-                                      'outer${docs?[index]['outer']}.png',
-                                      height: 45,
-                                    ):Container(),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(' '),
-                                          docs?[index]['outer']!=null?Text(outers![docs?[index]['outer']],style: TextStyle(fontWeight: FontWeight.bold),):Container()
-                                        ],
-                                      )
-                                    ]
-                                  ),
-                              ],
-                            ),
-                        ],
-                      ),
-                    ),
-                  )
-                  // Text('${docs?[index]['top']}'),
+                          ),
+                        )
+                            // Text('${docs?[index]['top']}'),
+                            );
+                      },
+                    );
+                  },
                 );
-              },
-            );
-          },
-        )
-    );
+              } else {
+                return CircularProgressIndicator();
+              }
+            }));
   }
 }
-

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'TimeSetting.dart';
 import 'UserInfomation.dart';
 import 'FeedbackPage.dart';
@@ -25,22 +26,33 @@ class _SettingsPageState extends State<SettingsPage> {
   int currentPageIndex = 2;
   static final storage = FlutterSecureStorage();
   final _authentication = FirebaseAuth.instance;
-  String? UserInfo='';
-  String? UserId='';
+  String? UserInfo = '';
+  String? UserId = '';
+  var prefs;
   @override
-  void initState(){
+  void initState() {
     super.initState();
+    intValue();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _asyncMethod();
     });
   }
+
+  void intValue() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   _asyncMethod() async {
-    final myInfo = await FirebaseFirestore.instance.collection('user')
-        .doc(FirebaseAuth.instance.currentUser!.uid).get();
+    final myInfo = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
     UserInfo = (await storage.read(key: "login"));
-    setState((){
+    setState(() {
       UserId = UserInfo!.split('@')[0];
-      _currentRangeValues = RangeValues(myInfo.data()!['userConstitution'][0].toDouble(), myInfo.data()!['userConstitution'][1].toDouble());
+      _currentRangeValues = RangeValues(
+          myInfo.data()!['userConstitution'][0].toDouble(),
+          myInfo.data()!['userConstitution'][1].toDouble());
     });
   }
 
@@ -66,7 +78,9 @@ class _SettingsPageState extends State<SettingsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(width: 10,),
+              SizedBox(
+                width: 10,
+              ),
               Padding(
                 padding: const EdgeInsets.only(right: 20),
                 child: Text(
@@ -91,10 +105,12 @@ class _SettingsPageState extends State<SettingsPage> {
             endIndent: 10,
           ),
           GestureDetector(
-            onTap: (){
-              showDialog(context: context, builder: (BuildContext context){
-                return feedbackPage();
-              });
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return feedbackPage();
+                  });
             },
             child: Container(
               color: Colors.white,
@@ -124,7 +140,7 @@ class _SettingsPageState extends State<SettingsPage> {
             endIndent: 10,
           ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.pushNamed(context, '/closet');
             },
             child: Container(
@@ -175,16 +191,18 @@ class _SettingsPageState extends State<SettingsPage> {
                       SliderTheme(
                         data: SliderThemeData(
                           thumbColor: Colors.white,
-                          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 11.0),
+                          thumbShape:
+                              RoundSliderThumbShape(enabledThumbRadius: 11.0),
                           overlayColor: Colors.green.withOpacity(0.18),
-                          overlayShape: RoundSliderOverlayShape(overlayRadius: 12.0),
+                          overlayShape:
+                              RoundSliderOverlayShape(overlayRadius: 12.0),
                           activeTrackColor: Color(0xFF34C759),
                           inactiveTrackColor: Colors.grey.shade300,
                           trackHeight: 11.0,
                           showValueIndicator: ShowValueIndicator.never,
                         ),
                         child: Container(
-                          width: MediaQuery.of(context).size.width/2,
+                          width: MediaQuery.of(context).size.width / 2,
                           child: RangeSlider(
                             values: _currentRangeValues,
                             min: 0,
@@ -212,7 +230,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width/5-10,
+                            width: MediaQuery.of(context).size.width / 5 - 10,
                           ),
                           Text(
                             '보통',
@@ -221,7 +239,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width/5-10,
+                            width: MediaQuery.of(context).size.width / 5 - 10,
                           ),
                           Text(
                             '더워요',
@@ -248,35 +266,39 @@ class _SettingsPageState extends State<SettingsPage> {
             endIndent: 10,
           ),
           GestureDetector(
-            onTap: (){
-              showDialog(context: context,
+            onTap: () {
+              showDialog(
+                  context: context,
                   builder: (context) => SimpleDialog(
-                    title: const Center(child: Text('안내문')),
-                    contentPadding: const EdgeInsets.all(10),
-                    children: [
-                      Center(child: Text('로그아웃 하시겠습니까?')),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        title: const Center(child: Text('안내문')),
+                        contentPadding: const EdgeInsets.all(10),
                         children: [
-                          TextButton(
-                              onPressed: (){
-                                context.read<Users>().readDB();
-                                FirebaseAuth.instance.signOut();
-                                storage.delete(key: 'login');
-                                Navigator.popUntil(context,(route)=>route.isFirst);
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context, '/login');
-                              },
-                              child: const Text('확인')),
-                          TextButton(
-                              onPressed: (){ Navigator.pop(context);},
-                              child: const Text('취소')),
-                        ],
-                      ),
+                          Center(child: Text('로그아웃 하시겠습니까?')),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    context.read<Users>().readDB();
+                                    FirebaseAuth.instance.signOut();
+                                    storage.delete(key: 'login');
+                                    prefs.remove('user');
 
-                    ],
-                  )
-              );
+                                    Navigator.popUntil(
+                                        context, (route) => route.isFirst);
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(context, '/login');
+                                  },
+                                  child: const Text('확인')),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('취소')),
+                            ],
+                          ),
+                        ],
+                      ));
             },
             child: Container(
               color: Colors.white,
@@ -314,7 +336,10 @@ class _SettingsPageState extends State<SettingsPage> {
             currentPageIndex = index;
             if (index == 0) {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/main',);
+              Navigator.pushNamed(
+                context,
+                '/main',
+              );
             } else if (index == 1) {
               Navigator.pop(context);
               Navigator.pushNamed(context, '/calendar');

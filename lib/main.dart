@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_config/flutter_config.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
-import 'Weather_Location.dart';
+import 'package:weather_app2/Weather_Location.dart';
+import 'SelectPage.dart';
+import 'SelectPositionPage.dart';
 import 'firebase_options.dart';
 
 // 페이지
@@ -18,6 +22,7 @@ import 'mainColor.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -50,14 +55,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-
-        ChangeNotifierProvider(create: (_) => Users()),
-        ChangeNotifierProvider(create: (_) => Weather_Location()),
-      ],
-      child: GestureDetector(
-          onTap: (){
+    return GlobalLoaderOverlay(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => Users()),
+          ChangeNotifierProvider(create: (_) => Weather_Location()),
+        ],
+        child: GestureDetector(
+          onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
           child: MaterialApp(
@@ -73,17 +78,25 @@ class MyApp extends StatelessWidget {
               // 최초 로그인일 경우에만 동네 설정 화면 띄우기
               // 이 기능이 어렵다면, 동네 설정 화면은 제거하고 홈화면에서 gps 버튼 눌러 설정할 수 있도록 함
               '/': (context) => const LoginPage(),
-              '/add':(context) => const AddPage(),
-              '/location': (context) => const SelectPositionPage(title: 'Location',),
+              '/location': (context) => const SelectPositionPage(
+                    title: 'Location',
+                  ),
+              '/add': (context) => const AddPage(),
+              '/select': (context) => const SelectPage(),
               '/closet': (context) => const MyClosetPage(),
               '/main': (context) => const MainPage(),
-              '/calendar': (context) => const CalendarPage(title: 'Calendar',),
-              '/settings': (context) => const SettingsPage(title: 'Settings',),
+              '/calendar': (context) => const CalendarPage(
+                    title: 'Calendar',
+                  ),
+              '/settings': (context) => const SettingsPage(
+                    title: 'Settings',
+                  ),
               '/login': (context) => const LoginPage(),
               '/signup': (context) => const SignupPage(),
             },
           ),
         ),
-      );
+      ),
+    );
   }
 }

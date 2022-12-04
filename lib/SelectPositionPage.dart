@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:http/http.dart' as http;
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'LocationAPI.dart';
 import 'Weather_Location.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 
 class SelectPositionPage extends StatefulWidget {
@@ -23,8 +22,8 @@ class SelectPositionPage extends StatefulWidget {
 
 class _SelectPositionPageState extends State<SelectPositionPage> {
   int pass = 0;
-  final _openweatherkey = '3cdec813571d0497b65e5a20577293b7';
-
+  final _openweatherkey = 'b2ece712030d8ca1ac751827e5e61afe';//FlutterConfig.get('apiKey');//'3cdec813571d0497b65e5a20577293b7';
+  var prefs;
   String dropdownValue = province.first;
   String dropdownValue2 = cityList.first;
   double? temp;
@@ -38,15 +37,15 @@ class _SelectPositionPageState extends State<SelectPositionPage> {
   double? lat;
   double? lon;
 
-  bool showSpinner=false;
-
   @override
   void initState() {
     super.initState();
   }
 
 
-
+  void getInstance () async {
+    prefs= await SharedPreferences.getInstance();
+  }
   void getPosition(String province) {
     setState(() {
       switch(province){
@@ -80,6 +79,9 @@ class _SelectPositionPageState extends State<SelectPositionPage> {
     required String province,
     required String city_name
   }) async {
+    getInstance();
+
+    context.loaderOverlay.show();
     var city;
     switch(province){
 
@@ -110,7 +112,7 @@ class _SelectPositionPageState extends State<SelectPositionPage> {
     Uri.parse(
         'http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$_openweatherkey&lang=kor&units=metric');
     print(str);*/
-
+    print(city);
 
     //해당 지역 이름에 해당하는 위도 경도를 가져오는 코드
     var str =
@@ -196,143 +198,132 @@ class _SelectPositionPageState extends State<SelectPositionPage> {
     } else {
       print('response status code = ${response.statusCode}');
     }
-
+    context.loaderOverlay.hide();
   }
 
 
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          title: Image.asset(
-            'appbar.png',
-            height: 45,
-          ),
+        title: Image.asset(
+          'appbar.png',
+          height: 45,
         ),
-        body: ModalProgressHUD(
-          inAsyncCall: showSpinner,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  '우리 동네를 검색해 찾아보세요',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: const Icon(Icons.arrow_downward),
-                  elevation: 16,
-                  style: const TextStyle(color: Colors.deepPurple),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  onChanged: (String? value) {
-                    // This is called when the user selects an item.
-                    setState(() {
-                      dropdownValue = value!;
-
-                      cityList = ['지역을 선택해주세요.'];
-                      dropdownValue2= cityList.first;
-                    });
-                    setState(() {
-                      showSpinner=true;
-                    });
-                    getPosition(value!);
-                    setState(() {
-                      showSpinner=false;
-                    });
-                  },
-                  items: province.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                DropdownButton<String>(
-                  value: dropdownValue2,
-                  icon: const Icon(Icons.arrow_downward),
-                  elevation: 16,
-                  style: const TextStyle(color: Colors.deepPurple),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  onChanged: (String? value) {
-                    // This is called when the user selects an item.
-                    setState(() {
-                      dropdownValue2 = value!;
-                    });
-                    setState(() {
-                      showSpinner=true;
-                    });
-                    getWeatherDataByName(province:dropdownValue!,
-                        city_name:value!);
-                    setState(() {
-                      showSpinner=false;
-                    });
-                  },
-                  items: cityList.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-                const Text(
-                  '국내 도/시를 선택해주세요 ex) 경기도 광주시',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                const Text(
-                  '동네의 날씨와 추천 옷차림을 볼 수 있어요',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(onPressed: () {
-                  setState(() {
-                    showSpinner=true;
-                  });
-                  context.read<Weather_Location>().setProvince(dropdownValue);
-                  context.read<Weather_Location>().setCity(dropdownValue2);
-                  context.read<Weather_Location>().setTemp(temp);
-                  context.read<Weather_Location>().setFeels_like(feels_like);
-                  context.read<Weather_Location>().setPm10(pm10_status);
-                  context.read<Weather_Location>().setpm2_5(pm2_5_status);
-                  context.read<Weather_Location>().setDescription(description);
-                  context.read<Weather_Location>().setPop(pop);
-                  context.read<Weather_Location>().setLat(lat);
-                  context.read<Weather_Location>().setLon(lon);
-                  setState(() {
-                    showSpinner=false;
-                  });
-                  Navigator.pushNamed(context, '/add');
-                }, child: const Text('Next')),
-              ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              '우리 동네를 검색해 찾아보세요',
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
-          ),
+            const SizedBox(
+              height: 20,
+            ),
+            DropdownButton<String>(
+              value: dropdownValue,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  dropdownValue = value!;
+
+                  cityList = ['지역을 선택해주세요.'];
+                  dropdownValue2= cityList.first;
+                });
+
+                getPosition(value!);
+              },
+              items: province.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+
+            DropdownButton<String>(
+              value: dropdownValue2,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (String? value) {
+                // This is called when the user selects an item.
+                setState(() {
+                  dropdownValue2 = value!;
+                });
+
+                getWeatherDataByName(province:dropdownValue!,
+                    city_name:value!);
+
+              },
+              items: cityList.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            const Text(
+              '국내 도/시를 선택해주세요 ex) 경기도 광주시',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+            const Text(
+              '동네의 날씨와 추천 옷차림을 볼 수 있어요',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(onPressed: () {
+
+              prefs.setString('province', dropdownValue);
+              prefs.setString('city', dropdownValue2);
+              prefs.setDouble('temp', temp);
+              prefs.setDouble('feels_like', feels_like);
+              prefs.setString('pm10', pm10_status);
+              prefs.setString('pm10', pm10_status);
+              prefs.setString('pm2_5', pm2_5_status);
+              prefs.setString('description', description);
+              prefs.setDouble('pop', pop);
+              prefs.setDouble('lat', lat);
+              prefs.setDouble('lon', lon);
+
+
+
+
+
+              Navigator.pushNamed(context, '/add');
+            }, child: const Text('Next')),
+          ],
         ),
-      );
+      ),
+    );
   }
 }

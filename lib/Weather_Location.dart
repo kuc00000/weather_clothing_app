@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Weather_Location with ChangeNotifier{
-  double? temp;
-  double? feels_like;
-  String? pm10_status;
-  String? pm2_5_status;
-  double? pop;
-  double? wind_speed;
+  double? temp; //하루 평균온도
+  double? feels_like; //체감온도
+  String? pm10_status; //미세먼지 수치
+  String? pm2_5_status; //초미세먼지 수치
+  double? pop; //강수량
+  double? wind_speed; //풍속
 
   String? province;
   String? city_name;
