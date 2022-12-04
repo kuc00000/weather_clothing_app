@@ -85,15 +85,12 @@ class _MainPageState extends State<MainPage> {
         .get();
     if(!mounted)return;
     context.read<Users>().readDB();
-    print(context.read<Users>().getOuter());
     setState((){
       recommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temp!.toInt(),
           context.read<Users>().getOuter(),
           context.read<Users>().getTop(),
           context.read<Users>().getBottom());
     });
-
-    print('오늘의 추천 : ${recommendList}');
   }
 
 
@@ -401,7 +398,6 @@ class _MainPageState extends State<MainPage> {
                           scrollDirection: Axis.horizontal,
                           itemCount: recommendList.length,
                           itemBuilder: (context, index) {
-                            print('innnndex${index}');
                             return recommendTile(recommendList: recommendList[index]);
                           },
                         ),

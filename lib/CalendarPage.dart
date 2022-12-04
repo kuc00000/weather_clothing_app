@@ -380,6 +380,7 @@ class _WeekClothListState extends State<WeekClothList> {
                                                 ? Text(
                                                     tops![docs?[index]['top']],
                                                     style: TextStyle(
+                                                      fontSize: 12,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   )
@@ -407,6 +408,7 @@ class _WeekClothListState extends State<WeekClothList> {
                                                     bottoms![docs?[index]
                                                         ['bottom']],
                                                     style: TextStyle(
+                                                      fontSize: 12,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   )
@@ -435,6 +437,7 @@ class _WeekClothListState extends State<WeekClothList> {
                                                         outers![docs?[index]
                                                             ['outer']],
                                                         style: TextStyle(
+                                                          fontSize: 12,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold),
