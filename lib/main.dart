@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app2/RevisePositionPage.dart';
 import 'package:weather_app2/Weather_Location.dart';
 import 'SelectPage.dart';
 import 'SelectPositionPage.dart';
@@ -83,6 +84,7 @@ class MyApp extends StatelessWidget {
                   ),
               '/add': (context) => const AddPage(),
               '/select': (context) => const SelectPage(),
+              '/change' : (context) => const RevisePositionPage(),
               '/closet': (context) => const MyClosetPage(),
               '/main': (context) => const MainPage(),
               '/calendar': (context) => const CalendarPage(

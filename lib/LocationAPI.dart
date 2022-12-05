@@ -16,19 +16,20 @@ Map<String,String> Gyeonggi = {'지역을 선택해주세요.':'기본','연천�
 
 
 Map<String,String> Chungcheong = {'지역을 선택해주세요.':'기본','옥천' : 'Okcheon',
-  '청주시':'Cheongju-si','공주시':'Gongju','보령' : 'Boryeong','논산' : 'Nonsan'};
+  '청주시':'Cheongju-si','괴산': 'Koesan','공주시':'Gongju','보령' : 'Boryeong',
+  '부여':'Buyeo','논산' : 'Nonsan'};
 
 Map<String,String> Gangwon = {'지역을 선택해주세요.':'기본', '춘천':'Chuncheon','화천':'Hwacheon','양구':'Yanggu','고성':'Kosong','속초':'Sokcho','인제':'Inje',
   '동해':'Tonghae','강릉':'Gangneung'};
 
 Map<String,String> Jeolla = {'지역을 선택해주세요.':'기본',
-  '전주':'Jeonju','임실':'Imsil',
+  '광주':'Gwangju','나주':'Naju','무안':'Muan','전주':'Jeonju','임실':'Imsil','신안군':'Sinan',
   '군산':'Gunsan', '마산':'Masan','안동':'Andong','진안군':'Jinan-gun','해남군':'Haenam','목포':'Mokpo','보성':'Boseong',
   '순천':'Suncheon'};
 
 
 Map<String,String> Gyeongsang = {'지역을 선택해주세요.':'기본','부산': 'Busan','울산' : 'Ulsan',
-  '창녕':'Changnyeong','마산':'Masan','함양':'Hamyang','안동':'Andong','포항':'Pohang', '경주': 'Gyeongju','경산시':'Gyeongsan-si','밀양':'Miryang','진주':'Jinju'};
+  '창녕':'Changnyeong','신현':'Sinhyeon','마산':'Masan','함양':'Hamyang','안동':'Andong','포항':'Pohang', '경주': 'Gyeongju','경산시':'Gyeongsan-si','밀양':'Miryang','진주':'Jinju'};
 
 Map<String,String> Jeju = {'지역을 선택해주세요.':'기본','제주시': 'Jeju City'};
 

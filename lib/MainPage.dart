@@ -284,8 +284,13 @@ class _MainPageState extends State<MainPage> {
                             setState(() {
                               locationDropdownValue = newValue!;
                             });
+                            if(locationDropdownValue=='동네수정'){
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/change');
+                            }
+
                           },
-                          items: <String>[city??'서울','동네추가'].map<DropdownMenuItem<String>>((String value) {
+                          items: <String>[city??'서울','동네수정'].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
