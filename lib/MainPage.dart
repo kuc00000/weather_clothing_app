@@ -404,6 +404,18 @@ class _MainPageState extends State<MainPage> {
                     fontSize: 18,
                   ),
                 ),
+                IconButton(onPressed: () async {
+                  final myInfo = await FirebaseFirestore.instance
+                      .collection('user')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .get();
+                  setState(()  {
+                    recommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temp!.toInt(),
+                        context.read<Users>().getOuter(),
+                        context.read<Users>().getTop(),
+                        context.read<Users>().getBottom());
+                  });
+                }, icon: const Icon(Icons.refresh))
               ],
             ),
             SizedBox(
@@ -412,7 +424,7 @@ class _MainPageState extends State<MainPage> {
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 7.0),
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 0.0),
                       child:
                       recommendList.length!=0?
                       Container(
