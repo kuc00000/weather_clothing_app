@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => Users()),
-          ChangeNotifierProvider(create: (_) => Weather_Location()),
+
         ],
         child: GestureDetector(
           onTap: () {

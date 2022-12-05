@@ -36,11 +36,13 @@ class _LoginFormState extends State<LoginForm> {
   //
   String? UserInfo = '';
   String? autoCheck = '';
+  var prefs;
 
   /* 자동 로그인 코드 */
   static final storage = FlutterSecureStorage();
   @override
   void initState() {
+
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _asyncMethod();
@@ -48,13 +50,15 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   _asyncMethod() async {
-    final prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     autoCheck = (await storage.read(key: "autologin"));
     /* 자동로그인 */
     if (autoCheck == 'true') {
       UserInfo = (await storage.read(key: "login"));
       /* 내장메모리에 저장된 로그인 이력이 있는경우 */
       if (UserInfo != null) {
+
+
         final currentUser = await _authentication.signInWithEmailAndPassword(
             email: UserInfo!.split(' ')[0], password: UserInfo!.split(' ')[1]);
         if (currentUser.user != null) {
@@ -63,10 +67,17 @@ class _LoginFormState extends State<LoginForm> {
               .doc(FirebaseAuth.instance.currentUser!.uid)
               .get();
           if (!mounted) return;
-          prefs.setString('user', currentUser.user.toString());
+
+          if(prefs.getString(UserInfo!.split(' ')[0])!=null){
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/main');
+          }
+          else if(prefs.getString(UserInfo!.split(' ')[0])==null){
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/location');
+          }
           // if (userInfo.data()!['isFirstVisit']==true){
-          Navigator.pop(context);
-          Navigator.pushNamed(context, '/location');
+
           // }
           // else{
           //   Navigator.pop(context);
@@ -156,9 +167,17 @@ class _LoginFormState extends State<LoginForm> {
                         .doc(FirebaseAuth.instance.currentUser!.uid)
                         .get();
                     if (!mounted) return;
+
+
                     // if (userInfo.data()!['isFirstVisit']==true){
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/location');
+                    if(prefs.getString(email)!=null){
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/main');
+                    }
+                    else if(prefs.getString(email)==null){
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/location');
+                    }
                     // }
                     // else{
                     //   Navigator.pop(context);

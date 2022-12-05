@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app2/mainColor.dart';
@@ -67,6 +68,12 @@ class _MainPageState extends State<MainPage> {
   String? description;
   String? city;
 
+
+  Map<String,dynamic>? userMap;
+  String? weatherPref;
+  String? UserInfo;
+  static final storage = FlutterSecureStorage();
+
   List<Weather> weatherList = [];
   List<List <int>> recommendList = [[-1,-1,-1],[1,3,4],[3,5,6],[2,5,2],[-1,0,0]];
 
@@ -75,7 +82,7 @@ class _MainPageState extends State<MainPage> {
     initValue();
     super.initState();
 
-    getWeeklyWeather();
+
     _asyncMethod();
   }
   _asyncMethod() async {
@@ -91,30 +98,41 @@ class _MainPageState extends State<MainPage> {
           context.read<Users>().getTop(),
           context.read<Users>().getBottom());
     });
+
+
   }
 
 
   Future<void> initValue() async{
+    UserInfo = (await storage.read(key: "login"));
+
     prefs = await SharedPreferences.getInstance();
+    weatherPref = prefs.getString(UserInfo!.split(' ')[0]);
+    userMap = jsonDecode(weatherPref!) as Map<String, dynamic>;
+
     setState((){
 
-      city =prefs.getString('city');
-      temp = prefs.getDouble('temp');
-      feels_like = prefs.getDouble('feels_like');
-      pop = prefs.getDouble('pop');
-      pm10 = prefs.getString('pm10');
-      pm2_5 = prefs.getString('pm2_5');
-      description = prefs.getString('description');
-      lat = prefs.getDouble('lat');
-      lon = prefs.getDouble('lon');
+      city =userMap!['city'];
+      temp = userMap!['temp'];
+      feels_like = userMap!['feels_like'];
+      pop = userMap!['pop'];
+      pm10 = userMap!['pm10'];
+      pm2_5 = userMap!['pm2_5'];
+      description = userMap!['description'];
+      lat = userMap!['lat'];
+      lon = userMap!['lon'];
     });
+
+    getWeeklyWeather();
 
   }
   Future<List<Weather>> getWeeklyWeather() async {
-    final prefs = await SharedPreferences.getInstance();
-    lat = prefs.getDouble('lat');
-    lon = prefs.getDouble('lon');
+
     final _openweatherkey = FlutterConfig.get('apiKey');
+
+    print('위도 경도는?');
+    print(lat);
+    print(lon);
     var str =
     Uri.parse(
         'http://api.openweathermap.org/data/2.5/forecast/?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric');
