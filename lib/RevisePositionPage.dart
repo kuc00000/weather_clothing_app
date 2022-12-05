@@ -236,62 +236,66 @@ class _RevisedPositionPageState extends State<RevisePositionPage> {
             const SizedBox(
               height: 20,
             ),
-            DropdownButton<String>(
-              value: dropdownValue,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  dropdownValue = value!;
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.expand_more),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.black),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.black,
+                  ),
+                  onChanged: (String? value) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      dropdownValue = value!;
 
-                  cityList = ['지역을 선택해주세요.'];
-                  dropdownValue2= cityList.first;
-                });
+                      cityList = ['지역을 선택해주세요.'];
+                      dropdownValue2= cityList.first;
+                    });
 
-                getPosition(value!);
-              },
-              items: province.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+                    getPosition(value!);
+                  },
+                  items: province.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                DropdownButton<String>(
+                  value: dropdownValue2,
+                  icon: const Icon(Icons.expand_more),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.black),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.black,
+                  ),
+                  onChanged: (String? value) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      dropdownValue2 = value!;
+                    });
+
+                    getWeatherDataByName(province:dropdownValue!,
+                        city_name:value!);
+
+                  },
+                  items: cityList.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
             const SizedBox(
               height: 20,
-            ),
-
-            DropdownButton<String>(
-              value: dropdownValue2,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  dropdownValue2 = value!;
-                });
-
-                getWeatherDataByName(province:dropdownValue!,
-                    city_name:value!);
-
-              },
-              items: cityList.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
             ),
             const Text(
               '국내 도/시를 선택해주세요 ex) 경기도 광주시',
@@ -341,7 +345,7 @@ class _RevisedPositionPageState extends State<RevisePositionPage> {
               prefs.setDouble('lon', lon);*/
 
               Navigator.pushNamed(context, '/main');
-            }, child: const Text('Next')),
+            }, child: const Text('완료', style: TextStyle(fontWeight: FontWeight.bold),)),
           ],
         ),
       ),

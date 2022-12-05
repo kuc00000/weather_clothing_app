@@ -89,15 +89,15 @@ class _SignupFormState extends State<SignupForm> {
             TextFormField(
               decoration: const InputDecoration(
                 labelStyle: TextStyle(
-                    color: AppColor.mainColor,
+                    color: Colors.grey,
                     fontWeight: FontWeight.bold
                 ),
-                labelText: 'Email',
+                labelText: '이메일',
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.mainColor)
+                    borderSide: BorderSide(color: Colors.grey)
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.mainColor),
+                  borderSide: BorderSide(color: Colors.grey),
                 ),
               ),
               onChanged: (value){
@@ -111,15 +111,15 @@ class _SignupFormState extends State<SignupForm> {
               obscureText: true,
               decoration: const InputDecoration(
                 labelStyle: TextStyle(
-                    color: AppColor.mainColor,
+                    color: Colors.grey,
                     fontWeight: FontWeight.bold
                 ),
-                labelText: 'Password',
+                labelText: '비밀번호',
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.mainColor)
+                    borderSide: BorderSide(color: Colors.grey)
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.mainColor),
+                  borderSide: BorderSide(color: Colors.grey),
                 ),
               ),
               onChanged: (value){
@@ -131,15 +131,15 @@ class _SignupFormState extends State<SignupForm> {
               obscureText: true,
               decoration: const InputDecoration(
                 labelStyle: TextStyle(
-                    color: AppColor.mainColor,
+                    color: Colors.grey,
                     fontWeight: FontWeight.bold
                 ),
-                labelText: 'Re-enter password',
+                labelText: '비밀번호 확인',
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.mainColor)
+                    borderSide: BorderSide(color: Colors.grey)
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.mainColor),
+                  borderSide: BorderSide(color: Colors.grey),
                 ),
               ),
               onChanged: (value){
@@ -221,7 +221,7 @@ class _SignupFormState extends State<SignupForm> {
                 child: Text('회원가입',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 15,
+                      fontSize: 18,
                     color: Colors.white
                   ),),
               ),

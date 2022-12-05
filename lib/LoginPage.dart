@@ -104,17 +104,17 @@ class _LoginFormState extends State<LoginForm> {
               height: 60,
             ),
             const SizedBox(
-              height: 70,
+              height: 100,
             ),
             TextFormField(
               decoration: const InputDecoration(
                 labelStyle: TextStyle(
-                    color: AppColor.mainColor, fontWeight: FontWeight.bold),
-                labelText: 'Email',
+                    color: Colors.grey, fontWeight: FontWeight.bold),
+                labelText: '이메일',
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.mainColor)),
+                    borderSide: BorderSide(color: Colors.grey)),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.mainColor),
+                  borderSide: BorderSide(color: Colors.grey),
                 ),
               ),
               onChanged: (value) {
@@ -128,12 +128,12 @@ class _LoginFormState extends State<LoginForm> {
               obscureText: true,
               decoration: const InputDecoration(
                 labelStyle: TextStyle(
-                    color: AppColor.mainColor, fontWeight: FontWeight.bold),
-                labelText: 'Password',
+                    color: Colors.grey, fontWeight: FontWeight.bold),
+                labelText: '비밀번호',
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.mainColor)),
+                    borderSide: BorderSide(color: Colors.grey)),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.mainColor),
+                  borderSide: BorderSide(color: Colors.grey),
                 ),
               ),
               onChanged: (value) {
@@ -220,67 +220,47 @@ class _LoginFormState extends State<LoginForm> {
                 padding: EdgeInsets.all(10.0),
                 child: Text(
                   '로그인',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15,color: Colors.white),
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
                 ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Checkbox(
-                        activeColor: AppColor.mainColor,
-                        value: autoLogin,
-                        onChanged: (value) async {
-                          setState(() {
-                            autoLogin = value!;
-                          });
-                          print(autoLogin);
-                          await storage.write(
-                              key: "autologin", value: autoLogin.toString());
-                        }),
-                    const Text(
-                      '자동로그인',
-                      style: TextStyle(fontSize: 17),
+                Expanded(
+                  child: ListTileTheme(
+                    horizontalTitleGap: 0,
+                    child: CheckboxListTile(
+                      title: const Text('자동 로그인',
+                        style: TextStyle(letterSpacing : 0, fontSize: 18),
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value: autoLogin,
+                      onChanged: (value) async {
+                        setState(() {
+                          autoLogin = value!;
+                        });
+                        print(autoLogin);
+                        await storage.write(
+                            key: "autologin", value: autoLogin.toString()
+                        );
+                      },
+                      checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
+                      contentPadding: EdgeInsets.zero,
                     ),
-                  ],
+                  ),
                 ),
                 TextButton(
                     onPressed: () {
                       _formKey.currentState!.reset();
                       Navigator.pushNamed(context, '/signup');
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 15),
-                      child: const Text(
-                        '회원가입',
-                        style:
-                            TextStyle(fontSize: 20, color: AppColor.mainColor),
-                      ),
-                    ))
-              ],
-            ),
-
-            /* 나중에 제거하기 */
-            Row(
-              children: [
-                Checkbox(
-                    activeColor: AppColor.mainColor,
-                    value: devLogin,
-                    onChanged: (value) async {
-                      setState(() {
-                        devLogin = value!;
-                      });
-                      if (devLogin) {
-                        email = '1122@naver.com';
-                        password = '11221122';
-                      } else {
-                        email = '';
-                        password = '';
-                      }
-                      // await storage.write(key: "autologin", value: devLogin.toString());
-                    }),
+                    child: const Text(
+                      '회원가입',
+                      style:
+                          TextStyle(fontSize: 18, color: AppColor.mainColor),
+                    ),
+                ),
               ],
             ),
           ],
