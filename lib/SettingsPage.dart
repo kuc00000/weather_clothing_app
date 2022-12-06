@@ -223,28 +223,22 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          SizedBox(
+                            width: 5,
+                          ),
                           Text(
-                            '추워요',
+                            '얇은 옷이 좋아요',
                             style: TextStyle(
                               fontSize: 12,
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width / 5 - 10,
+                            width: MediaQuery.of(context).size.width / 5 - 25,
                           ),
                           Text(
-                            '보통',
-                            style: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 5 - 10,
-                          ),
-                          Text(
-                            '더워요',
+                            '두꺼운 옷이 좋아요',
                             style: TextStyle(
                               fontSize: 12,
                             ),

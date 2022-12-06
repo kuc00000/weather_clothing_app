@@ -550,9 +550,9 @@ class WeatherListElement extends StatelessWidget {
      '플리스','야구잠바','항공잠바','가죽자켓','환절기코트','조끼패딩',
      '무스탕','숏패딩','겨울코트','돕바','롱패딩'];
    List<String> tops=['민소매티','반소매티','긴소매티','셔츠','맨투맨','후드티셔츠','목폴라','니트'
-     ,'여름블라우스','봄가을블라우스'];
-   List<String> bottoms=['숏팬츠','트레이닝팬츠','슬랙스','데님팬츠','코튼팬츠'
-     ,'여름스커트','봄가을스커트','레깅스','겨울스커트'];
+     ,'여름\n블라우스','봄가을\n블라우스'];
+   List<String> bottoms=['숏팬츠','트레이닝\n팬츠','슬랙스','데님팬츠','코튼팬츠'
+     ,'여름스커트','봄가을\n스커트','레깅스','겨울스커트'];
 
 
   @override
@@ -591,7 +591,8 @@ class WeatherListElement extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 12,
                           fontWeight:
-                          FontWeight.bold,),
+                          FontWeight.bold,)
+                      ,textAlign: TextAlign.center,
                     ),
                 ]),
               ),
@@ -609,6 +610,7 @@ class WeatherListElement extends StatelessWidget {
                       fontSize: 12,
                       fontWeight:
                       FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
               ]),
             ),
@@ -626,6 +628,7 @@ class WeatherListElement extends StatelessWidget {
                       fontSize: 12,
                       fontWeight:
                       FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
               ]),
             ),
