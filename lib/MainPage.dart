@@ -550,7 +550,7 @@ class WeatherListElement extends StatelessWidget {
 
 
   List<int> recommendList = [1,3,4];
-   List<String> outers=['바람막이', '청자켓','야상','트러커자켓','가디건',
+   List<String> outers=['바람막이', '청자켓','야상','트러커\n자켓','가디건',
      '플리스','야구잠바','항공잠바','가죽자켓','환절기코트','조끼패딩',
      '무스탕','숏패딩','겨울코트','돕바','롱패딩'];
    List<String> tops=['민소매티','반소매티','긴소매티','셔츠','맨투맨','후드티셔츠','목폴라','니트'

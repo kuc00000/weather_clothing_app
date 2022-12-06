@@ -234,13 +234,13 @@ class _WeekClothListState extends State<WeekClothList> {
     '바람막이',
     '청자켓',
     '야상',
-    '트러커자켓',
+    '트러커\n자켓',
     '가디건',
     '플리스',
     '야구잠바',
     '항공잠바',
     '가죽자켓',
-    '환절기코트',
+    '환절기\n코트',
     '조끼패딩',
     '무스탕',
     '숏패딩',
@@ -254,7 +254,7 @@ class _WeekClothListState extends State<WeekClothList> {
     '긴소매티',
     '셔츠',
     '맨투맨',
-    '후드티셔츠',
+    '후드\n티셔츠',
     '목폴라',
     '니트',
     '여름\n블라우스',
@@ -375,7 +375,7 @@ class _WeekClothListState extends State<WeekClothList> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                      width: 75,
+                                      width: 65,
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
@@ -385,7 +385,7 @@ class _WeekClothListState extends State<WeekClothList> {
                                               ? Text(
                                                   '${feedbacks?[docs?[index]['feedback']]}',
                                                   style:TextStyle(
-                                                    fontWeight: FontWeight.w500
+                                                    fontWeight: FontWeight.w500,
                                                   ),
                                               textAlign: TextAlign.center)
                                               : Container(),
@@ -395,7 +395,7 @@ class _WeekClothListState extends State<WeekClothList> {
                                   ],
                                 ),
                                 SizedBox(
-                                  width: 170,
+                                  width: 190,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
