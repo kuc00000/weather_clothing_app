@@ -364,11 +364,12 @@ class _WeekClothListState extends State<WeekClothList> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Text('${date?[index].reference.id.toString()}'),
+                                date?[index].reference.id.toString()!=null?Text('${date?[index].reference.id.toString()}'):Container(),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('${docs?[index]['temperature']} `C'),
+                                    docs?[index]['temperature']!=null?
+                                    Text('${docs?[index]['temperature']} `C'):Container(),
                                     docs?[index]['feedback'] != null
                                         ? Text(
                                             '${feedbacks?[docs?[index]['feedback']]}')

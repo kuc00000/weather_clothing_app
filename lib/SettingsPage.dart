@@ -50,6 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
         .get();
     UserInfo = (await storage.read(key: "login"));
     setState(() {
+      if(!mounted)return;
       UserId = UserInfo!.split('@')[0];
       _currentRangeValues = RangeValues(
           myInfo.data()!['userConstitution'][0].toDouble(),
