@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -62,6 +65,11 @@ class _feedbackPageState extends State<feedbackPage> {
   String outerDropdownValue = '안입음';
   String topDropdownValue = '민소매티';
   String bottomDropdownValue = '숏팬츠';
+
+  Map<String,dynamic>? userMap;
+  String? weatherPref;
+  String? UserInfo;
+  static final storage = FlutterSecureStorage();
   double? temp;
 
   var prefs;
@@ -71,8 +79,12 @@ class _feedbackPageState extends State<feedbackPage> {
   }
 
   Future<double> initValue() async {
-    final prefs = await SharedPreferences.getInstance();
-    temp = prefs.getDouble('temp');
+    UserInfo = (await storage.read(key: "login"));
+
+    prefs = await SharedPreferences.getInstance();
+    weatherPref = prefs.getString(UserInfo!.split(' ')[0]);
+    userMap = jsonDecode(weatherPref!) as Map<String, dynamic>;
+    temp = userMap!['temp'];
     return temp!;
   }
 
