@@ -11,7 +11,7 @@ List<String> cityList = ['지역을 선택해주세요.'];
 
 Map<String,String> Gyeonggi = {'지역을 선택해주세요.':'기본','연천군':'Yeoncheon-gun','의정부시':'Uijeongbu-si','서울':'Seoul','인천':'Incheon',
   '안산시':'Ansan-si','수원시':'Suwon-si','이천시':'Icheon-si','오산':'Osan','안성':'Anseong',
-  '구리시':'Guri-si','하남':'Hanam','부천':'Bucheon-si','성남':'Seeongnam-si','양평':'Yangpyong',
+  '구리시':'Guri-si','하남':'Hanam','부천':'Bucheon-si','성남':'Seongnam-si','양평':'Yangpyong',
   '여주':'Yeoju','광주':'Gwangju','용인' : 'Yongin', '가평군' : 'Gapyeong County'};
 
 

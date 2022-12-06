@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -26,6 +29,7 @@ class _CalendarPageState extends State<CalendarPage> {
   List<QueryDocumentSnapshot<Map<String, dynamic>>>? date;
   final theme = ThemeData.light();
   int lenDate = 0;
+
 
   @override
   void initState() {
@@ -225,6 +229,8 @@ class WeekClothList extends StatefulWidget {
   State<WeekClothList> createState() => _WeekClothListState();
 }
 
+
+
 class _WeekClothListState extends State<WeekClothList> {
   List<String>? outers = [
     '바람막이',
@@ -296,6 +302,10 @@ class _WeekClothListState extends State<WeekClothList> {
 
   double? temp;
 
+  final storage = FlutterSecureStorage();
+  String? UserInfo;
+  String? weatherPref;
+
   @override
   void initState() {
     super.initState();
@@ -317,8 +327,11 @@ class _WeekClothListState extends State<WeekClothList> {
   }
 
   Future<double> initValue() async {
+    UserInfo = (await storage.read(key: "login"));
     final prefs = await SharedPreferences.getInstance();
-    temp = prefs.getDouble('temp');
+    weatherPref = prefs.getString(UserInfo!.split(' ')[0]);
+    Map<String,dynamic> userMap = jsonDecode(weatherPref!) as Map<String, dynamic>;
+    temp = userMap!['temp'];
     return temp!;
   }
 
