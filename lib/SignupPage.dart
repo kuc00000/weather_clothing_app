@@ -167,7 +167,7 @@ class _SignupFormState extends State<SignupForm> {
                       'outer':myOuter,
                       'top':myTop,
                       'bottom':myBottom,
-                      'userConstitution':[30,35],
+                      'userConstitution':[7,14],
                       'isFirstVisit':true
                     });
                     if (newUser.user !=null){

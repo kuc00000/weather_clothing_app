@@ -243,7 +243,7 @@ class _feedbackPageState extends State<feedbackPage> {
                                     .split(' ')[0])
                                 .get();
                             adjustConstitution(
-                                _sliderValue,
+                                _sliderValue.toInt(),
                                 [
                                   myInfo.data()!['userConstitution'][0],
                                   myInfo.data()!['userConstitution'][1]

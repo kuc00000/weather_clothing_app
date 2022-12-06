@@ -207,8 +207,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: RangeSlider(
                             values: _currentRangeValues,
                             min: 0,
-                            max: 40,
-                            divisions: 40,
+                            max: 20,
+                            divisions: 20,
                             labels: RangeLabels(
                               _currentRangeValues.start.round().toString(),
                               _currentRangeValues.end.round().toString(),
