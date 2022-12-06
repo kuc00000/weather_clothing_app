@@ -325,7 +325,7 @@ class _MainPageState extends State<MainPage> {
                       width: 5,
                     ),
                      Text(
-                       '강수확률 ${pop!*100}%',
+                       '강수확률 ${((pop??0)*100).toInt()}%',
                       style: TextStyle(
                         fontSize: 14,
                       ),
