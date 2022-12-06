@@ -346,8 +346,8 @@ class _WeekClothListState extends State<WeekClothList> {
                   stream: FirebaseFirestore.instance
                       .collection(FirebaseAuth.instance.currentUser!.uid)
                       .where('temperature',
-                          isGreaterThan: temp!.toInt() - 30,
-                          isLessThan: temp!.toInt() + 30)
+                          isGreaterThan: temp!.toInt() -2.5,
+                          isLessThan: temp!.toInt() + 2.5)
                       .snapshots(),
                   builder: (context, snapshot) {
                     final docs = snapshot.data?.docs;
