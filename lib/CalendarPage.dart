@@ -346,8 +346,8 @@ class _WeekClothListState extends State<WeekClothList> {
                   stream: FirebaseFirestore.instance
                       .collection(FirebaseAuth.instance.currentUser!.uid)
                       .where('temperature',
-                          isGreaterThan: temp!.toInt() -2.5,
-                          isLessThan: temp!.toInt() + 2.5)
+                          isGreaterThan: temp!.round() - 30,
+                          isLessThan: temp!.round() + 30)
                       .snapshots(),
                   builder: (context, snapshot) {
                     final docs = snapshot.data?.docs;
@@ -369,7 +369,7 @@ class _WeekClothListState extends State<WeekClothList> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     docs?[index]['temperature']!=null?
-                                    Text('${docs?[index]['temperature']} `C'):Container(),
+                                    Text('${docs?[index]['temperature']} °'):Container(),
                                     docs?[index]['feedback'] != null
                                         ? Text(
                                             '${feedbacks?[docs?[index]['feedback']]}')

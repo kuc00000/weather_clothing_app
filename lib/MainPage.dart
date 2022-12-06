@@ -16,8 +16,8 @@ import 'package:intl/intl.dart' as date;
 class Weather{
   String? dayOfWeek;
   String? description;
-  double? min_temp;
-  double? max_temp;
+  int? min_temp;
+  int? max_temp;
   String? image;
 
   Weather(this.dayOfWeek,this.description, this.min_temp, this.max_temp,this.image);
@@ -30,11 +30,11 @@ class Weather{
     this.description = description;
   }
 
-  setMin_temp(double? min_temp){
+  setMin_temp(int? min_temp){
     this.min_temp = min_temp;
   }
 
-  setMax_temp(double? max_temp){
+  setMax_temp(int? max_temp){
     this.max_temp = max_temp;
   }
 }
@@ -186,7 +186,7 @@ class _MainPageState extends State<MainPage> {
           print(description);
           var image = dataJson['list'][i*8]['weather'][0]['icon']+'@2x.png';
           setState(() {
-            weatherList.add(Weather(daysOfWeek_str,description,min_temp,max_temp,image));
+            weatherList.add(Weather(daysOfWeek_str,description,min_temp.toInt(),max_temp.toInt(),image));
 
           });
 
@@ -366,11 +366,11 @@ class _MainPageState extends State<MainPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${temp??0.toStringAsFixed(1)}℃',
+                        '${(temp??0).round()}°',
                         style: TextStyle(fontSize: 40,),
                       ),
                       Text(
-                        '체감온도 ${feels_like??0.toStringAsFixed(1)} ℃',
+                        '체감온도 ${(feels_like??0).round()}°',
                         style: TextStyle(fontSize: 14,),
                       ),
                       const SizedBox(
@@ -462,14 +462,6 @@ class _MainPageState extends State<MainPage> {
                     fontSize: 18,
                   ),
                 ),
-                IconButton(onPressed: () {
-                  setState(()  {
-                    weatherList = weatherList;
-                  });
-
-
-
-                }, icon: const Icon(Icons.refresh))
               ],
             ),
             const SizedBox(
@@ -539,8 +531,8 @@ class WeatherListElement extends StatelessWidget {
       : super(key: key);
   final String? dayOfWeek;
   final String? weather;
-  final double? min_temp;
-  final double? max_temp;
+  final int? min_temp;
+  final int? max_temp;
   final String? image;
 
 
@@ -552,14 +544,14 @@ class WeatherListElement extends StatelessWidget {
          Text(
           '$dayOfWeek',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 20,
           ),
         ),
         Image.network('http://openweathermap.org/img/wn/$image'),
              Text(
-              '${min_temp!}~${max_temp!}℃',
+              '${(min_temp!+max_temp!)~/2}°',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 20,
               ),
             ),
             const Text(
