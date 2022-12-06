@@ -1,13 +1,11 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 //*****Example Code*****
 //outfitOutput = outfitRecommendation(userConstitution, degree, outers , tops,bottoms)
 //userConstitution = adjustConstitution(feedback,userConstitution,todayOutfit,degree);
 
 
 // [lowerBound, upperBound, clothID]
+import 'package:flutter/foundation.dart';
+
 final outers =[
   [12,14,0],//바람막이
   [18,20,1],//청자켓
@@ -23,7 +21,7 @@ final outers =[
   [23,25,11],//무스탕
   [24,26,12],//숏패딩
   [26,28,13],//겨울코트
-  [27,29,14],//돕바
+  [27,30,14],//돕바
   [28,30,15],// 롱패딩
 ];
 final tops =[
@@ -59,9 +57,12 @@ List<List<int>> outfitRecommendation(List<int> userConstitution,int degree,
   // ];
   final banList=[ //해당 값은 ban 됌 [outer,top,bottom]
     //1000: 모든 옷 포함, -1 : 무시.
-    [1000,100,-1],//하의는 상관없이, 민소매는 모든 아우터와 입지 않는다.
-    [1000,-1,200], //상의와 상관없이, 숏팬츠는 모든 아우터와 입지 않는다.
-
+    [1000,0,-1],//하의는 상관없이, 민소매는 모든 아우터와 입지 않는다.
+    [1000,-1,0], //상의와 상관없이, 숏팬츠는 모든 아우터와 입지 않는다.
+    [1000,8,-1], //하의와 상관없이, 여름 블라우스는 모든 아우터와 입지 않는다.
+    [1000,-1,5], //상의와 상관없이, 여름 스커트 는 모든 아우터와 입지 않는다.
+    [-1,0,8],//아우터와 상관없이, 민소매와 겨울스커트
+    [-1,1,8],//아우터와 상관없이, 반소매와 겨울스커트
   ];
   int minC = 30;
   userConstitution[0]+=minC;
@@ -72,10 +73,11 @@ List<List<int>> outfitRecommendation(List<int> userConstitution,int degree,
   List<List<int>> existOuter = [];
   List<List<int>> existTop = [];
   List<List<int>> existBottom = [];
-  List<int> adequateRecommendation =[7,15];
+  List<int> adequateRecommendation =[5,8];
   double lowerCriteria = 0.0;
   double upperCriteria=100.0;
   double curCriteria=0.0;
+  double spareCriteria = 0.0;
   int tryFindCriteria = 0;
 
   //Will care about one piece at the end
@@ -117,7 +119,9 @@ List<List<int>> outfitRecommendation(List<int> userConstitution,int degree,
         if (banList[banIndex][oub]==-1){}
         else if(banList[banIndex][oub]==1000){if(idRecommend[idRIndex][oub] ==-1) {haveToBan = haveToBan&false;} }
         else{if(banList[banIndex][oub]!=idRecommend[idRIndex][oub]){haveToBan=haveToBan&false;}}
+        // if (idRecommend[idRIndex][2]==5){print(haveToBan);}
       }
+      // if (idRecommend[idRIndex][2]==5){print("end");}
       if (haveToBan){
         havetoBanList[idRIndex]=true;
       }
@@ -155,13 +159,20 @@ List<List<int>> outfitRecommendation(List<int> userConstitution,int degree,
         upperCriteria=curCriteria;
       }
     }
+    if (count>adequateRecommendation[1]){
+      spareCriteria=curCriteria;
+    }
+    // print('$lowerCriteria, $upperCriteria, $curCriteria, $count');
   }
-
-  //print('$tryFindCriteria 회 탐색, 유사도: $curCriteria%');
+  //너무 작으면 그나마 컸던 걸로 선택
+  if (indexRecommend.length<adequateRecommendation[0]){
+    curCriteria=spareCriteria;
+  }
+  print('$tryFindCriteria 회 탐색, 유사도: $curCriteria%');
   //Translate ID to index
   int indexRecommendSize = -1;
   for (var t =0; t<idRecommend.length;t++){
-    if(idRecommend[t][3]>curCriteria){
+    if(idRecommend[t][3]>=curCriteria){
       indexRecommend.add([-1,-1,-1]);
       indexRecommendSize+=1;
       List<int> id = [
@@ -175,9 +186,12 @@ List<List<int>> outfitRecommendation(List<int> userConstitution,int degree,
       }
     }
   }
+  indexRecommend.shuffle();
+  if (indexRecommend.length>adequateRecommendation[1]){ indexRecommend=indexRecommend.sublist(0,adequateRecommendation[1]);print(indexRecommend); }
   userConstitution[0]-=minC;
   userConstitution[1]-=minC;
   if(indexRecommend.isEmpty){return [[-1,-1,-1]];}
+
   return indexRecommend;
 }
 
@@ -308,7 +322,7 @@ List<int> adjustHere(int mode, List<int> beforeConstitution, int index, int chan
 
 List<int> adjustConstitution(int feedback,List<int> userConstitution,List<int> userOutfit,int todayWeather) { //feedback : 0~4 int, userConstitution : [a,b] 알고리즘 수정필요******
   //feedback =>  [so cold, cold, normal, hot, so hot]
-  //default [7,14]
+  //default [7,14] 0~20
   //30<=constitution<=50
   List<int> userOutfitSum=[0,0];
   int maxSize=8;
@@ -326,7 +340,6 @@ List<int> adjustConstitution(int feedback,List<int> userConstitution,List<int> u
   userOutfitSum[1]+=tops[userOutfit[1]][1];
   userOutfitSum[0]+=bottoms[userOutfit[2]][0];
   userOutfitSum[1]+=bottoms[userOutfit[2]][1];
-
 
   if(feedback==2){ //nothing to change
     userConstitution[0]-=minC;
@@ -368,10 +381,6 @@ List<int> adjustConstitution(int feedback,List<int> userConstitution,List<int> u
   userConstitution[1]-=minC;
   return userConstitution; //return type: [a,b]
 }
-
-
-
-
 
 
 

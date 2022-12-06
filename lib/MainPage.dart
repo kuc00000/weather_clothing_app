@@ -76,7 +76,7 @@ class _MainPageState extends State<MainPage> {
 
   List<Weather> weatherList = [];
   List<List <int>> recommendList = [[-1,-1,-1],[1,3,4],[3,5,6],[2,5,2],[-1,0,0]];
-
+  var myInfo;
   @override
   void initState() {
     initValue();
@@ -86,7 +86,7 @@ class _MainPageState extends State<MainPage> {
     _asyncMethod();
   }
   _asyncMethod() async {
-    final myInfo = await FirebaseFirestore.instance
+    myInfo = await FirebaseFirestore.instance
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
@@ -248,6 +248,7 @@ class _MainPageState extends State<MainPage> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Image.asset(
           'appbar.png',
@@ -465,9 +466,19 @@ class _MainPageState extends State<MainPage> {
               ],
             ),
             ListView.builder(
+                    primary: false,
                     shrinkWrap: true,
                     itemCount: weatherList.length,
                     itemBuilder: (context, index){
+                      int temperature = (weatherList[index].min_temp! + weatherList[index].max_temp!)~/2;
+
+
+                      List<List <int>> weeklyRecommendList = [[-1,-1,-1],[1,3,4],[3,5,6],[2,5,2],[-1,0,0]];
+                      weeklyRecommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temperature!.toInt(),
+                          context.read<Users>().getOuter(),
+                          context.read<Users>().getTop(),
+                          context.read<Users>().getBottom());
+
                       return  Column(
                           children : [
                             WeatherListElement(
@@ -475,7 +486,7 @@ class _MainPageState extends State<MainPage> {
                               weather: weatherList[index].description,
                               min_temp: weatherList[index].min_temp,
                               max_temp: weatherList[index].max_temp,
-                              image: weatherList[index].image,
+                              image: weatherList[index].image, recommendList: weeklyRecommendList[0]
                             )
                           ],
                         );
@@ -524,13 +535,24 @@ class _MainPageState extends State<MainPage> {
 
 
 class WeatherListElement extends StatelessWidget {
-   WeatherListElement({Key? key, this.dayOfWeek, this.weather,this.min_temp,this.max_temp,this.image})
+   WeatherListElement({Key? key, required this.dayOfWeek,  required this.weather,
+     required this.min_temp,required this.max_temp,required this.image,required this.recommendList})
       : super(key: key);
   final String? dayOfWeek;
   final String? weather;
   final int? min_temp;
   final int? max_temp;
   final String? image;
+
+
+  List<int> recommendList = [1,3,4];
+   List<String> outers=['바람막이', '청자켓','야상','트러커자켓','가디건',
+     '플리스','야구잠바','항공잠바','가죽자켓','환절기코트','조끼패딩',
+     '무스탕','숏패딩','겨울코트','돕바','롱패딩'];
+   List<String> tops=['민소매티','반소매티','긴소매티','셔츠','맨투맨','후드티셔츠','목폴라','니트'
+     ,'여름블라우스','봄가을블라우스'];
+   List<String> bottoms=['숏팬츠','트레이닝팬츠','슬랙스','데님팬츠','코튼팬츠'
+     ,'여름스커트','봄가을스커트','레깅스','겨울스커트'];
 
 
   @override
@@ -551,12 +573,77 @@ class WeatherListElement extends StatelessWidget {
                 fontSize: 20,
               ),
             ),
-            const Text(
+        ((recommendList[0]!=-1||recommendList[1]!=-1||recommendList[2]!=-1)
+            &&(recommendList.length!=0))?Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Column(
+
+                  children: [
+                   Image.asset(
+                      'top${recommendList[1]}.png',
+                       width: 50,
+                     height: 50,
+                    ),
+                    Text(
+                      '${tops[recommendList[1]]}',
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight:
+                          FontWeight.bold,),
+                    ),
+                ]),
+              ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Column(children: [
+                Image.asset(
+                  'bottom${recommendList[2]}.png',
+                  width: 50,
+                  height: 50,
+                ),
+                Text(
+                  '${bottoms[recommendList[2]]}',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight:
+                      FontWeight.bold),
+                ),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Column(children: [
+                Image.asset(
+                  'outer${recommendList[0]}.png',
+                  width: 50,
+                  height: 50,
+                ),
+                Text(
+                  '${outers[recommendList[0]]}',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight:
+                      FontWeight.bold),
+                ),
+              ]),
+            ),
+            ]):Container(
+          width: 185,
+          color: Colors.white,
+          child: Text('적합한 옷차림을\n찾지 못했습니다.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.bold
+          ),),
+        ),
+            /*const Text(
               '반팔 티셔츠, 가디건',
               style: TextStyle(
                 fontSize: 14,
               ),
-            ),
+            ),*/
 
       ],
     );

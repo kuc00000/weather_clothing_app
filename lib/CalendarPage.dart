@@ -259,25 +259,25 @@ class _WeekClothListState extends State<WeekClothList> {
     '후드티셔츠',
     '목폴라',
     '니트',
-    '여름블라우스',
-    '봄가을블라우스'
+    '여름\n블라우스',
+    '봄가을\n블라우스'
   ];
   List<String>? bottoms = [
     '숏팬츠',
-    '트레이닝팬츠',
+    '트레이닝\n팬츠',
     '슬랙스',
     '데님팬츠',
     '코튼팬츠',
     '여름스커트',
-    '봄가을스커트',
+    '봄가을\n스커트',
     '레깅스',
     '겨울스커트'
   ];
   final List<String>? feedbacks = <String>[
     '추웠어요',
-    '조금추웠어요',
+    '조금\n추웠어요',
     '적당했어요',
-    '조금더웠어요',
+    '조금\n더웠어요',
     '더웠어요'
   ];
   final List<String> maxDayTemperature = <String>[
@@ -364,7 +364,13 @@ class _WeekClothListState extends State<WeekClothList> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                date?[index].reference.id.toString()!=null?Text('${date?[index].reference.id.toString()}'):Container(),
+                                date?[index].reference.id.toString()!=null?
+                                Text('${date?[index].reference.id.toString()}',
+                                  style:TextStyle(
+                                    fontSize: 15,
+                                  )
+                                )
+                                    :Container(),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -372,7 +378,9 @@ class _WeekClothListState extends State<WeekClothList> {
                                     Text('${docs?[index]['temperature']} °'):Container(),
                                     docs?[index]['feedback'] != null
                                         ? Text(
-                                            '${feedbacks?[docs?[index]['feedback']]}')
+                                            '${feedbacks?[docs?[index]['feedback']]}',
+                                            style:TextStyle(),
+                                        textAlign: TextAlign.center)
                                         : Container(),
                                   ],
                                 ),
@@ -380,87 +388,68 @@ class _WeekClothListState extends State<WeekClothList> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(right: 10),
-                                      child: Stack(children: [
+                                      child: Column(children: [
                                         docs?[index]['top'] != null
                                             ? Image.asset(
                                                 'top${docs?[index]['top']}.png',
                                                 height: 45,
                                               )
                                             : Container(),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(' '),
-                                            docs?[index]['top'] != null
-                                                ? Text(
-                                                    tops![docs?[index]['top']],
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  )
-                                                : Container()
-                                          ],
-                                        )
+                                        docs?[index]['top'] != null
+                                            ? Text(
+                                                tops![docs?[index]['top']],
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          textAlign: TextAlign.center,
+                                              )
+                                            : Container()
                                       ]),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(right: 10),
-                                      child: Stack(children: [
+                                      child: Column(children: [
                                         docs?[index]['bottom'] != null
                                             ? Image.asset(
                                                 'bottom${docs?[index]['bottom']}.png',
                                                 height: 45,
                                               )
                                             : Container(),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(' '),
-                                            docs?[index]['bottom'] != null
-                                                ? Text(
-                                                    bottoms![docs?[index]
-                                                        ['bottom']],
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  )
-                                                : Container()
-                                          ],
-                                        )
+                                        docs?[index]['bottom'] != null
+                                            ? Text(
+                                                bottoms![docs?[index]
+                                                    ['bottom']],
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                            textAlign: TextAlign.center
+                                              )
+                                            : Container()
                                       ]),
                                     ),
                                     docs?[index]['outer'] == -1
                                         ? Container()
-                                        : Stack(children: [
+                                        : Column(children: [
                                             docs?[index]['outer'] != null
                                                 ? Image.asset(
                                                     'outer${docs?[index]['outer']}.png',
                                                     height: 45,
                                                   )
                                                 : Container(),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(' '),
-                                                docs?[index]['outer'] != null
-                                                    ? Text(
-                                                        outers![docs?[index]
-                                                            ['outer']],
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      )
-                                                    : Container()
-                                              ],
-                                            )
+                                            docs?[index]['outer'] != null
+                                                ? Text(
+                                                    outers![docs?[index]
+                                                        ['outer']],
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight
+                                                                .bold),
+                                                textAlign: TextAlign.center
+                                                  )
+                                                : Container()
                                           ]),
                                   ],
                                 ),
