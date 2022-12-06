@@ -91,7 +91,7 @@ class _MainPageState extends State<MainPage> {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     if(!mounted)return;
-    context.read<Users>().readDB();
+    await context.read<Users>().readDB();
     setState((){
       recommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temp!.toInt(),
           context.read<Users>().getOuter(),
@@ -394,28 +394,32 @@ class _MainPageState extends State<MainPage> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
+              children: const [
+                SizedBox(
                   width: 20,
                 ),
-                const Text(
-                  '오늘의 추천',
-                  style: TextStyle(
-                    fontSize: 18,
+                Padding(
+                  padding: EdgeInsets.only(top: 10,bottom: 10,left: 5),
+                  child: Text(
+                    '오늘의 추천',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
-                IconButton(onPressed: () async {
-                  final myInfo = await FirebaseFirestore.instance
-                      .collection('user')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .get();
-                  setState(()  {
-                    recommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temp!.toInt(),
-                        context.read<Users>().getOuter(),
-                        context.read<Users>().getTop(),
-                        context.read<Users>().getBottom());
-                  });
-                }, icon: const Icon(Icons.refresh))
+                // IconButton(onPressed: () async {
+                //   final myInfo = await FirebaseFirestore.instance
+                //       .collection('user')
+                //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                //       .get();
+                //   setState(()  {
+                //     if(!mounted)return;
+                //     recommendList = outfitRecommendation([myInfo.data()!['userConstitution'][0],myInfo.data()!['userConstitution'][1]], temp!.toInt(),
+                //         context.read<Users>().getOuter(),
+                //         context.read<Users>().getTop(),
+                //         context.read<Users>().getBottom());
+                //   });
+                // }, icon: const Icon(Icons.refresh))
               ],
             ),
             SizedBox(
@@ -763,9 +767,9 @@ class _recommendTileState extends State<recommendTile> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(right: 3,top: 2),
+                                padding: const EdgeInsets.only(right: 2,top: 2),
                                 child: CircleAvatar(
-                                  radius: 8,
+                                  radius: 7,
                                   backgroundColor: Colors.white,
                                   ),
                               ),
@@ -793,7 +797,7 @@ class _recommendTileState extends State<recommendTile> {
                 Text(''),
                 Image.asset(
                   'label.png',
-                  height: 100,
+                  height: 95,
                 ),
               ],
             ),
