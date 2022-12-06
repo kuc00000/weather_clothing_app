@@ -152,37 +152,35 @@ class _CalendarPageState extends State<CalendarPage> {
               },
             ),
           ),
-          SizedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    Transform.scale(
-                      scale: 0.70,
-                      child: CupertinoSwitch(
-                        activeColor: AppColor.mainColor,
-                        value: _calendarswitch,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _calendarswitch = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const Text(
-                  '비슷한 날씨일 때의 옷차림과 피드백 보기',
-                  style: TextStyle(
-                    fontSize: 18,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [
+                  const SizedBox(
+                    height: 2,
                   ),
+                  Transform.scale(
+                    scale: 0.70,
+                    child: CupertinoSwitch(
+                      activeColor: AppColor.mainColor,
+                      value: _calendarswitch,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _calendarswitch = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const Text(
+                '비슷한 날씨일 때의 옷차림과 피드백 보기    ',
+                style: TextStyle(
+                  fontSize: 18,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           _calendarswitch ? WeekClothList() : Container(),
         ],
@@ -359,99 +357,114 @@ class _WeekClothListState extends State<WeekClothList> {
                       itemBuilder: (context, index) {
                         return ListTile(
                             title: Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 date?[index].reference.id.toString()!=null?
-                                Text('${date?[index].reference.id.toString()}',
-                                  style:TextStyle(
-                                    fontSize: 15,
-                                  )
+                                SizedBox(
+                                  width: 87,
+                                  child: Text('${date?[index].reference.id.toString()}',
+                                    style:TextStyle(
+                                      fontSize: 17,
+                                    )
+                                  ),
                                 )
                                     :Container(),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    docs?[index]['temperature']!=null?
-                                    Text('${docs?[index]['temperature']} °'):Container(),
-                                    docs?[index]['feedback'] != null
-                                        ? Text(
-                                            '${feedbacks?[docs?[index]['feedback']]}',
-                                            style:TextStyle(),
-                                        textAlign: TextAlign.center)
-                                        : Container(),
-                                  ],
-                                ),
                                 Row(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: Column(children: [
-                                        docs?[index]['top'] != null
-                                            ? Image.asset(
-                                                'top${docs?[index]['top']}.png',
-                                                height: 45,
-                                              )
-                                            : Container(),
-                                        docs?[index]['top'] != null
-                                            ? Text(
-                                                tops![docs?[index]['top']],
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                          textAlign: TextAlign.center,
-                                              )
-                                            : Container()
-                                      ]),
+                                    SizedBox(
+                                      width: 75,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          docs?[index]['temperature']!=null?
+                                          Text('${docs?[index]['temperature']} ℃'):Container(),
+                                          docs?[index]['feedback'] != null
+                                              ? Text(
+                                                  '${feedbacks?[docs?[index]['feedback']]}',
+                                                  style:TextStyle(
+                                                    fontWeight: FontWeight.w500
+                                                  ),
+                                              textAlign: TextAlign.center)
+                                              : Container(),
+                                        ],
+                                      ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: Column(children: [
-                                        docs?[index]['bottom'] != null
-                                            ? Image.asset(
-                                                'bottom${docs?[index]['bottom']}.png',
-                                                height: 45,
-                                              )
-                                            : Container(),
-                                        docs?[index]['bottom'] != null
-                                            ? Text(
-                                                bottoms![docs?[index]
-                                                    ['bottom']],
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                            textAlign: TextAlign.center
-                                              )
-                                            : Container()
-                                      ]),
-                                    ),
-                                    docs?[index]['outer'] == -1
-                                        ? Container()
-                                        : Column(children: [
-                                            docs?[index]['outer'] != null
-                                                ? Image.asset(
-                                                    'outer${docs?[index]['outer']}.png',
-                                                    height: 45,
-                                                  )
-                                                : Container(),
-                                            docs?[index]['outer'] != null
-                                                ? Text(
-                                                    outers![docs?[index]
-                                                        ['outer']],
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight
-                                                                .bold),
-                                                textAlign: TextAlign.center
-                                                  )
-                                                : Container()
-                                          ]),
                                   ],
+                                ),
+                                SizedBox(
+                                  width: 170,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10),
+                                        child: Column(children: [
+                                          docs?[index]['top'] != null
+                                              ? Image.asset(
+                                                  'top${docs?[index]['top']}.png',
+                                                  height: 45,
+                                                )
+                                              : Container(),
+                                          docs?[index]['top'] != null
+                                              ? Text(
+                                                  tops![docs?[index]['top']],
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                            textAlign: TextAlign.center,
+                                                )
+                                              : Container()
+                                        ]),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10),
+                                        child: Column(children: [
+                                          docs?[index]['bottom'] != null
+                                              ? Image.asset(
+                                                  'bottom${docs?[index]['bottom']}.png',
+                                                  height: 45,
+                                                )
+                                              : Container(),
+                                          docs?[index]['bottom'] != null
+                                              ? Text(
+                                                  bottoms![docs?[index]
+                                                      ['bottom']],
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                              textAlign: TextAlign.center
+                                                )
+                                              : Container()
+                                        ]),
+                                      ),
+                                      docs?[index]['outer'] == -1
+                                          ? Container()
+                                          : Column(children: [
+                                              docs?[index]['outer'] != null
+                                                  ? Image.asset(
+                                                      'outer${docs?[index]['outer']}.png',
+                                                      height: 45,
+                                                    )
+                                                  : Container(),
+                                              docs?[index]['outer'] != null
+                                                  ? Text(
+                                                      outers![docs?[index]
+                                                          ['outer']],
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                  textAlign: TextAlign.center
+                                                    )
+                                                  : Container()
+                                            ]),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),

@@ -301,13 +301,15 @@ class _SelectPositionPageState extends State<SelectPositionPage> {
             const Text(
               '국내 도/시를 선택해주세요 ex) 경기도 광주시',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 15,
+                fontWeight: FontWeight.w500
               ),
             ),
             const Text(
               '동네의 날씨와 추천 옷차림을 볼 수 있어요',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 15,
+                fontWeight: FontWeight.w500
               ),
             ),
             const SizedBox(

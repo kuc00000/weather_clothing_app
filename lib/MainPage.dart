@@ -479,17 +479,21 @@ class _MainPageState extends State<MainPage> {
                           context.read<Users>().getTop(),
                           context.read<Users>().getBottom());
 
-                      return  Column(
-                          children : [
-                            WeatherListElement(
-                              dayOfWeek: weatherList[index].dayOfWeek,
-                              weather: weatherList[index].description,
-                              min_temp: weatherList[index].min_temp,
-                              max_temp: weatherList[index].max_temp,
-                              image: weatherList[index].image, recommendList: weeklyRecommendList[0]
-                            )
-                          ],
-                        );
+                      return  Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children : [
+                              WeatherListElement(
+                                dayOfWeek: weatherList[index].dayOfWeek,
+                                weather: weatherList[index].description,
+                                min_temp: weatherList[index].min_temp,
+                                max_temp: weatherList[index].max_temp,
+                                image: weatherList[index].image, recommendList: weeklyRecommendList[0]
+                              )
+                            ],
+                          ),
+                      );
                     },
              ),
 
@@ -633,14 +637,14 @@ class WeatherListElement extends StatelessWidget {
               ]),
             ),
             ]):Container(
-          width: 185,
-          color: Colors.white,
-          child: Text('적합한 옷차림을\n찾지 못했습니다.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold
-          ),),
-        ),
+              width: 150,
+              color: Colors.white,
+              child: Text('적합한 옷차림을\n찾지 못했습니다.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w500
+              ),),
+            ),
             /*const Text(
               '반팔 티셔츠, 가디건',
               style: TextStyle(
@@ -678,10 +682,11 @@ class _recommendTileState extends State<recommendTile> {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: Stack(
-        children: [Container(
+        children: [
+          Container(
           width: 380,
           height: 170,
-          child:Center(
+          child: Center(
             child: Container(
               width: 360,
               height: 150,
