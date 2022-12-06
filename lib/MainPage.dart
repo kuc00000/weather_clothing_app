@@ -390,7 +390,7 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -419,11 +419,8 @@ class _MainPageState extends State<MainPage> {
               ],
             ),
             SizedBox(
-              height: 200,
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Padding(
+              height: 185,
+              child: Padding(
                       padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 0.0),
                       child:
                       recommendList.length!=0?
@@ -436,11 +433,7 @@ class _MainPageState extends State<MainPage> {
                             return recommendTile(recommendList: recommendList[index]);
                           },
                         ),
-                      )
-                          :EmptyCard(),
-                    ),
-                  ),
-                ],
+                      ):EmptyCard(),
               ),
             ),
             const Divider(
@@ -456,16 +449,16 @@ class _MainPageState extends State<MainPage> {
                 const SizedBox(
                   width: 20,
                 ),
-                const Text(
-                  '주간날씨',
-                  style: TextStyle(
-                    fontSize: 18,
+                Padding(
+                  padding: const EdgeInsets.only(top: 12,left: 5),
+                  child: const Text(
+                    '주간날씨',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ],
-            ),
-            const SizedBox(
-              height: 20,
             ),
             ListView.builder(
                     shrinkWrap: true,
@@ -593,7 +586,7 @@ class _recommendTileState extends State<recommendTile> {
       child: Stack(
         children: [Container(
           width: 380,
-          height: 250,
+          height: 170,
           child:Center(
             child: Container(
               width: 360,
