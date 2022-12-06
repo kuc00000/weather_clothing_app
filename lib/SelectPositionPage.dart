@@ -24,7 +24,7 @@ class SelectPositionPage extends StatefulWidget {
 
 class _SelectPositionPageState extends State<SelectPositionPage> {
   int pass = 0;
-  final _openweatherkey = FlutterConfig.get('apiKey');//'3cdec813571d0497b65e5a20577293b7';
+  final _openweatherkey = FlutterConfig.get('apiKey');//
   var prefs;
   String dropdownValue = province.first;
   String dropdownValue2 = cityList.first;
