@@ -228,7 +228,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           Text(
                             '추워요',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
                             ),
                           ),
                           SizedBox(
@@ -237,7 +237,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           Text(
                             '보통',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
                             ),
                           ),
                           SizedBox(
@@ -246,7 +246,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           Text(
                             '더워요',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
                             ),
                           ),
                         ],
