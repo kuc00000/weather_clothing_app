@@ -11,7 +11,6 @@
 # 일기예복소개
 <p align="center">
  <br>
- <img src = "./docs/manual image/manual_3.jpg" width="700">
  <img src = "./docs/manual image/manual_4.jpg" width="700">
  <img src = "./docs/manual image/manual_5.jpg" width="700">
  <img src = "./docs/manual image/manual_6.jpg" width="700">
